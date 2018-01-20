@@ -30,6 +30,8 @@
 	<array>
 		<string>armv7</string>
 		<string>arkit</string>
+		<string>location-services</string>
+		<string>gps</string>
 	</array>
 	<key>UIStatusBarHidden</key>
 	<true/>
@@ -46,5 +48,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>Privacy – Location When In Use Usage Description</key>
+	<string>Enable to see memories around you and post your own memories!</string>
 </dict>
 </plist>
