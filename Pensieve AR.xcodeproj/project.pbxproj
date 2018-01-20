@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		98D6820BFDD00FA0119C6548 /* Pods_Pensieve_AR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B32C1678D0F17188581DF64 /* Pods_Pensieve_AR.framework */; };
+		F56188962013B10500F856C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F56188952013B10500F856C2 /* GoogleService-Info.plist */; };
+		F56188982013B43100F856C2 /* PensieveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56188972013B43100F856C2 /* PensieveModel.swift */; };
 		F5A1718A2013236400440783 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A171892013236400440783 /* AppDelegate.swift */; };
 		F5A1718C2013236400440783 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = F5A1718B2013236400440783 /* art.scnassets */; };
 		F5A1718E2013236400440783 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A1718D2013236400440783 /* ViewController.swift */; };
@@ -21,6 +23,8 @@
 		2B32C1678D0F17188581DF64 /* Pods_Pensieve_AR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pensieve_AR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C5136D2D9280A3692332FC /* Pods-Pensieve AR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pensieve AR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pensieve AR/Pods-Pensieve AR.debug.xcconfig"; sourceTree = "<group>"; };
 		E1457DDFB536E2E1C1E00EF6 /* Pods-Pensieve AR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pensieve AR.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pensieve AR/Pods-Pensieve AR.release.xcconfig"; sourceTree = "<group>"; };
+		F56188952013B10500F856C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F56188972013B43100F856C2 /* PensieveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PensieveModel.swift; sourceTree = "<group>"; };
 		F5A171862013236400440783 /* Pensieve AR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pensieve AR.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5A171892013236400440783 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5A1718B2013236400440783 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -90,6 +94,8 @@
 				F5A171922013236400440783 /* Assets.xcassets */,
 				F5A171942013236400440783 /* LaunchScreen.storyboard */,
 				F5A171972013236400440783 /* Info.plist */,
+				F56188952013B10500F856C2 /* GoogleService-Info.plist */,
+				F56188972013B43100F856C2 /* PensieveModel.swift */,
 			);
 			path = "Pensieve AR";
 			sourceTree = "<group>";
@@ -158,6 +164,7 @@
 			files = (
 				F5A1718C2013236400440783 /* art.scnassets in Resources */,
 				F5A171962013236400440783 /* LaunchScreen.storyboard in Resources */,
+				F56188962013B10500F856C2 /* GoogleService-Info.plist in Resources */,
 				F5A171932013236400440783 /* Assets.xcassets in Resources */,
 				F5A171912013236400440783 /* Main.storyboard in Resources */,
 			);
@@ -174,10 +181,20 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Pensieve AR/Pods-Pensieve AR-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/ARCL/ARCL.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GeoFire/GeoFire.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ARCL.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GeoFire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -226,6 +243,7 @@
 			files = (
 				F5A1719E2013328C00440783 /* AddMemoryViewController.swift in Sources */,
 				F5A1718E2013236400440783 /* ViewController.swift in Sources */,
+				F56188982013B43100F856C2 /* PensieveModel.swift in Sources */,
 				F5A1718A2013236400440783 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,7 +388,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.AdamsApps.Pensieve-AR";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -386,7 +404,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.AdamsApps.Pensieve-AR";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

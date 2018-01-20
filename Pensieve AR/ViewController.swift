@@ -10,8 +10,11 @@ import UIKit
 import SceneKit
 import ARKit
 import CoreLocation
+import UserNotifications
+import GeoFire
+import FirebaseDatabase
 
-class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
 
     @IBOutlet weak var sessionInfoView: UIView!
     @IBOutlet weak var sessionInfoLabel: UILabel!
@@ -19,7 +22,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     
     // Used to start getting the users location
     let locationManager = CLLocationManager()
-
+    let notificationCenter = UNUserNotificationCenter.current()
+    var SharedPensieveModel : PensieveModel? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,10 +49,25 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
             locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
             locationManager.startUpdatingLocation()
         }
+        
+        notificationCenter.delegate = self
+        notificationCenter.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            if granted {
+                print("NotificationCenter Authorization Granted!")
+            }
+        }
+        
+        self.navigationController?.navigationBar.alpha = 0.5
+        self.navigationController?.title = "Pensieve AR"
+        
+        SharedPensieveModel = PensieveModel.shared
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.alpha = 0.5
+        self.navigationController?.title = "Pensieve AR"
+        //self.navigationController?.isNavigationBarHidden = true
         guard ARWorldTrackingConfiguration.isSupported else {
             fatalError("""
                 ARKit is not available on this device. For apps that require ARKit
@@ -157,21 +176,51 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         
         self.present(alertController, animated: true, completion: nil)
     }
-}
-
-extension UIViewController
-{
-    func hideKeyboard()
-    {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self,
-            action: #selector(UIViewController.dismissKeyboard))
+    
+    func ScheduleNotification(_ sender: Any) {
+        let center = UNUserNotificationCenter.current()
         
-        view.addGestureRecognizer(tap)
+        center.removeAllPendingNotificationRequests() // deletes pending scheduled notifications, there is a schedule limit qty
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Memory nearby!"
+        content.body = "Open Pensieve AR to see memories around you"
+        content.categoryIdentifier = "alert"
+        content.sound = UNNotificationSound.default()
+        
+        // Ex. Trigger within a timeInterval
+        // let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        
+        // Ex. Trigger within a Location
+        let centerLoc = CLLocationCoordinate2D(latitude: 37.32975796, longitude: -122.01989151)
+        let region = CLCircularRegion(center: centerLoc, radius: 100.0, identifier: UUID().uuidString) // radius in meters
+        region.notifyOnEntry = true
+        region.notifyOnExit = true
+        let trigger = UNLocationNotificationTrigger(region: region, repeats: true)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.add(request)
     }
     
-    @objc func dismissKeyboard()
-    {
-        view.endEditing(true)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        completionHandler([.alert, .sound])
+    }
+    
+    func locationManager(_ manager: CLLocationManager,
+                         didUpdateLocations locations: [CLLocation]) {
+        let latestLocation: CLLocation = locations[locations.count - 1]
+        let latitude = String(latestLocation.coordinate.latitude)
+        let longitude = String(latestLocation.coordinate.longitude)
+        print("\(latitude) \(longitude)")
+        
+        let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
+        // Query locations at [37.7832889, -122.4056973] with a radius of 600 meters
+        var circleQuery = geoFire?.query(at: latestLocation, withRadius: 0.2)
+        
+        var queryHandle = circleQuery?.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
+            print("Key '\(key)' entered the search area and is at location '\(location)'")
+        })
     }
 }
+
