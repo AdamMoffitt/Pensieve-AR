@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 import CoreLocation
 
-class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var sessionInfoView: UIView!
     @IBOutlet weak var sessionInfoLabel: UILabel!
@@ -19,16 +19,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Used to start getting the users location
     let locationManager = CLLocationManager()
-    
-    // For use when the app is open
-     locationManager.requestWhenInUseAuthorization()
-    
-    // If location services is enabled get the users location
-    if CLLocationManager.locationServicesEnabled() {
-    locationManager.delegate = self
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
-    locationManager.startUpdatingLocation()
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +35,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Set the scene to the view
         sceneView.scene = scene
+        
+        // For use when the app is open
+        locationManager.requestWhenInUseAuthorization()
+        
+        // If location services is enabled get the users location
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
+            locationManager.startUpdatingLocation()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,17 +108,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func sessionWasInterrupted(_ session: ARSession) {
         // Inform the user that the session has been interrupted, for example, by presenting an overlay.
+        sessionInfoView.alpha = 0.5
         sessionInfoLabel.text = "Session was interrupted"
     }
     
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required.
+        sessionInfoView.alpha = 0.5
         sessionInfoLabel.text = "Session interruption ended"
         resetTracking()
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user.
+        sessionInfoView.alpha = 0.5
         sessionInfoLabel.text = "Session failed: \(error.localizedDescription)"
         resetTracking()
     }
@@ -152,5 +156,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         alertController.addAction(openAction)
         
         self.present(alertController, animated: true, completion: nil)
+    }
+}
+
+extension UIViewController
+{
+    func hideKeyboard()
+    {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(UIViewController.dismissKeyboard))
+        
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard()
+    {
+        view.endEditing(true)
     }
 }

@@ -9,12 +9,11 @@
 import UIKit
 import CoreLocation
 
-class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate {
+class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate, UITextViewDelegate {
 
     // Used to start getting the users location
     
     let locationManager = CLLocationManager()
-    
     
     let imagePicker = UIImagePickerController()
     
@@ -23,7 +22,7 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
     @IBOutlet var addmemoryImageButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        imagePicker.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
         // If location services is enabled get the users location
@@ -32,6 +31,12 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
             locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
             locationManager.startUpdatingLocation()
         }
+        
+        memoryCaptionTextView.delegate = self
+        memoryCaptionTextView.returnKeyType = .done
+        memoryCaptionTextView.text = "Enter caption here..."
+        memoryCaptionTextView.textColor = UIColor.lightGray
+        self.hideKeyboard()
     }
     
     @IBAction func takePhotoTapped(_ sender: AnyObject) {
@@ -67,11 +72,34 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
             animated: true,
             completion: nil)
     }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        
+        memoryImageView.contentMode = .scaleAspectFit
+        memoryImageView.backgroundColor = .clear
+        memoryImageView
+            .image = pickedImage
+        addmemoryImageButton.titleLabel?.text = ""
+        
+        print("here here here")
+        
+        dismiss(animated: true, completion: nil)
+        
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     @IBAction func addMemoryButtonPressed(_ sender: Any) {
         let caption = memoryCaptionTextView
         let image = memoryImageView.image
-        if let location = locations.first {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        if let location = locationManager.location {
             print(location.coordinate)
+        } else {
+            print("whoops")
         }
         // TODO: make POST call to post memory to Firebase
     }
@@ -100,5 +128,26 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
         alertController.addAction(openAction)
         
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    // TextView delegate method to simulate placeholder text
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Enter caption here..."
+            textView.textColor = UIColor.lightGray
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true
     }
 }

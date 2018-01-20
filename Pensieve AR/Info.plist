@@ -50,5 +50,7 @@
 	</array>
 	<key>Privacy – Location When In Use Usage Description</key>
 	<string>Enable to see memories around you and post your own memories!</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Enable to see memories around you and post your own memories!</string>
 </dict>
 </plist>
