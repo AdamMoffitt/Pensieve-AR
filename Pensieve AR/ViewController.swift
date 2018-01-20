@@ -13,6 +13,7 @@ import CoreLocation
 import UserNotifications
 import GeoFire
 import FirebaseDatabase
+import ARCL
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
 
@@ -24,7 +25,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     let locationManager = CLLocationManager()
     let notificationCenter = UNUserNotificationCenter.current()
     var SharedPensieveModel : PensieveModel? = nil
-    
+    var currentLocation : CLLocation = CLLocation()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,13 +33,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         sceneView.delegate = self
         
         // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
         
-        // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let text = SCNText(string: "Pensieve AR", extrusionDepth: 4)
         
-        // Set the scene to the view
-        sceneView.scene = scene
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.green
+        text.materials = [material]
+        
+        let node = SCNNode()
+        node.position = SCNVector3(x: 0, y: 0.02, z: -1)
+        node.scale = SCNVector3(x: 0.01, y: 0.01, z: 0.01)
+        node.geometry = text
+        
+        sceneView.scene.rootNode.addChildNode(node)
+        sceneView.autoenablesDefaultLighting = true
         
         // For use when the app is open
         locationManager.requestWhenInUseAuthorization()
@@ -47,6 +56,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
+            locationManager.distanceFilter = 100
             locationManager.startUpdatingLocation()
         }
         
@@ -214,13 +224,34 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         let longitude = String(latestLocation.coordinate.longitude)
         print("\(latitude) \(longitude)")
         
-        let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
-        // Query locations at [37.7832889, -122.4056973] with a radius of 600 meters
-        var circleQuery = geoFire?.query(at: latestLocation, withRadius: 0.2)
         
-        var queryHandle = circleQuery?.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
-            print("Key '\(key)' entered the search area and is at location '\(location)'")
-        })
-    }
+        // let distanceTravelled = latestLocation.distance(from: currentLocation)
+        // if (distanceTravelled.magnitude > 100 ) {
+            currentLocation = latestLocation
+            let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
+            // Query locations at [37.7832889, -122.4056973] with a radius of 600 meters
+            var circleQuery = geoFire?.query(at: latestLocation, withRadius: 0.1)
+            var notificationSent = false
+            var queryHandle = circleQuery?.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
+                print("Key '\(key)' entered the search area and is at location '\(location)'")
+                if (!notificationSent) {
+                    notificationSent = true
+                    print("memoryFound! should notify now")
+                    // Send notification that memory was found near you
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2, repeats: false)
+                    let content = UNMutableNotificationContent()
+                    content.title = "Memories found near you!"
+                    content.body = "Open Pensieve AR to see augmented reality memories near you."
+                    content.categoryIdentifier = "alert"
+                    content.sound = UNNotificationSound.default()
+                    let request = UNNotificationRequest(identifier: "memoryFound", content: content, trigger: trigger)
+                    self.notificationCenter.add(request, withCompletionHandler: { (error) in
+                        print("notification sent")
+                    })
+                }
+                
+            })
+        }
+    //}
 }
 
