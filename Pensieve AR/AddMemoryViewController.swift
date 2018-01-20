@@ -9,19 +9,12 @@
 import UIKit
 import CoreLocation
 
-class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLLocationManagerDelegate {
 
     // Used to start getting the users location
     
     let locationManager = CLLocationManager()
-    locationManager.requestWhenInUseAuthorization()
     
-    // If location services is enabled get the users location
-    if CLLocationManager.locationServicesEnabled() {
-    locationManager.delegate = self
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
-    locationManager.startUpdatingLocation()
-    }
     
     let imagePicker = UIImagePickerController()
     
@@ -30,8 +23,15 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
     @IBOutlet var addmemoryImageButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        locationManager.requestWhenInUseAuthorization()
+        
+        // If location services is enabled get the users location
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
+            locationManager.startUpdatingLocation()
+        }
     }
     
     @IBAction func takePhotoTapped(_ sender: AnyObject) {
