@@ -32,6 +32,7 @@ PODS:
   - GoogleToolboxForMac/NSData+zlib (2.1.3):
     - GoogleToolboxForMac/Defines (= 2.1.3)
   - GTMSessionFetcher/Core (1.1.12)
+  - IQKeyboardManagerSwift (5.0.7)
   - leveldb-library (1.20)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
@@ -45,6 +46,7 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Storage
   - GeoFire (from `https://github.com/firebase/geofire-objc.git`)
+  - IQKeyboardManagerSwift
 
 EXTERNAL SOURCES:
   GeoFire:
@@ -66,9 +68,10 @@ SPEC CHECKSUMS:
   GeoFire: 12dde45333e02aace5a8d921749095b9135cabc1
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   GTMSessionFetcher: ebaa1f79a5366922c1735f1566901f50beba23b7
+  IQKeyboardManagerSwift: 30fb3a61de1af53a95e02b80fb54ed0a19d5ede5
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
 
-PODFILE CHECKSUM: 2aa6c18e7aaab394a86446995fbbf2d0509965b6
+PODFILE CHECKSUM: 509390d9a5a5e51f850f905b1e463e2c57f458a6
 
 COCOAPODS: 1.3.1

@@ -10,6 +10,7 @@ target 'Pensieve AR' do
 	pod 'Firebase/Core'
 	pod 'Firebase/Storage'
 	pod 'Firebase/Database'
-	pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
+    pod 'IQKeyboardManagerSwift'
+    pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
 
 end

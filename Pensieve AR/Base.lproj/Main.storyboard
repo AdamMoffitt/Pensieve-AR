@@ -18,25 +18,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w6z-vc-VEh">
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w6z-vc-VEh" customClass="SceneLocationView" customModule="ARCL">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
                             <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qtO-0X-mSY">
-                                <rect key="frame" x="0.0" y="659" width="375" height="8"/>
+                                <rect key="frame" x="0.0" y="609" width="375" height="58"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ypJ-D9-xkD">
-                                        <rect key="frame" x="8" y="0.0" width="359" height="0.0"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ypJ-D9-xkD">
+                                        <rect key="frame" x="8" y="0.0" width="359" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="359" id="5Pb-62-MAs"/>
+                                            <constraint firstAttribute="height" constant="50" id="LsI-OJ-KWW"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="ypJ-D9-xkD" firstAttribute="leading" secondItem="qtO-0X-mSY" secondAttribute="leading" constant="8" id="3hX-fK-KFP"/>
-                                    <constraint firstAttribute="trailing" secondItem="ypJ-D9-xkD" secondAttribute="trailing" constant="8" id="Nf6-4h-SKl"/>
-                                    <constraint firstItem="ypJ-D9-xkD" firstAttribute="top" secondItem="qtO-0X-mSY" secondAttribute="top" id="ddv-Vh-9Qt"/>
-                                    <constraint firstAttribute="bottom" secondItem="ypJ-D9-xkD" secondAttribute="bottom" constant="8" id="k9j-Nr-woi"/>
+                                    <constraint firstAttribute="trailing" secondItem="ypJ-D9-xkD" secondAttribute="trailing" constant="8" id="7sg-cN-UTq"/>
+                                    <constraint firstAttribute="bottom" secondItem="ypJ-D9-xkD" secondAttribute="bottom" constant="8" id="CD4-Zp-sgK"/>
+                                    <constraint firstItem="ypJ-D9-xkD" firstAttribute="leading" secondItem="qtO-0X-mSY" secondAttribute="leading" constant="8" id="EX5-dN-7a8"/>
+                                    <constraint firstItem="ypJ-D9-xkD" firstAttribute="top" secondItem="qtO-0X-mSY" secondAttribute="top" id="vu7-3p-NXm"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7PB-6e-35e">
@@ -56,17 +59,19 @@
                             <constraint firstItem="w6z-vc-VEh" firstAttribute="top" secondItem="xcJ-16-nIa" secondAttribute="top" id="1n6-wc-6vx"/>
                             <constraint firstItem="w6z-vc-VEh" firstAttribute="bottom" secondItem="rbt-vC-OPa" secondAttribute="bottom" id="51G-rv-iDv"/>
                             <constraint firstItem="7PB-6e-35e" firstAttribute="centerX" secondItem="w6z-vc-VEh" secondAttribute="centerX" id="ANd-PG-ILZ"/>
-                            <constraint firstItem="qtO-0X-mSY" firstAttribute="bottom" secondItem="rbt-vC-OPa" secondAttribute="bottom" id="U2K-yJ-G2R"/>
+                            <constraint firstItem="qtO-0X-mSY" firstAttribute="bottom" secondItem="rbt-vC-OPa" secondAttribute="bottom" id="AWD-Yn-4Nv"/>
+                            <constraint firstItem="qtO-0X-mSY" firstAttribute="trailing" secondItem="rbt-vC-OPa" secondAttribute="trailing" id="Ppj-5w-81a"/>
+                            <constraint firstItem="qtO-0X-mSY" firstAttribute="leading" secondItem="rbt-vC-OPa" secondAttribute="leading" id="TCF-jI-bj1"/>
                             <constraint firstItem="w6z-vc-VEh" firstAttribute="leading" secondItem="rbt-vC-OPa" secondAttribute="leading" id="WAw-Hu-DHk"/>
-                            <constraint firstItem="qtO-0X-mSY" firstAttribute="trailing" secondItem="rbt-vC-OPa" secondAttribute="trailing" id="Z7T-xV-HW9"/>
                             <constraint firstItem="7PB-6e-35e" firstAttribute="top" secondItem="w6z-vc-VEh" secondAttribute="bottom" constant="-137" id="fku-bN-2ac"/>
                             <constraint firstItem="w6z-vc-VEh" firstAttribute="trailing" secondItem="rbt-vC-OPa" secondAttribute="trailing" id="kry-be-i1g"/>
-                            <constraint firstItem="qtO-0X-mSY" firstAttribute="leading" secondItem="rbt-vC-OPa" secondAttribute="leading" id="oDr-VH-sAI"/>
+                            <constraint firstItem="qtO-0X-mSY" firstAttribute="top" secondItem="7PB-6e-35e" secondAttribute="bottom" constant="8" id="yZd-OO-ntg"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="rbt-vC-OPa"/>
                     </view>
                     <navigationItem key="navigationItem" title="Pensieve AR" id="mjj-N2-KCY"/>
                     <connections>
+                        <outlet property="addMemoryButton" destination="7PB-6e-35e" id="xu6-EZ-9xj"/>
                         <outlet property="sceneView" destination="w6z-vc-VEh" id="yVR-1V-HwM"/>
                         <outlet property="sessionInfoLabel" destination="ypJ-D9-xkD" id="b0E-2X-5lp"/>
                         <outlet property="sessionInfoView" destination="qtO-0X-mSY" id="sRD-kb-IKR"/>
@@ -94,7 +99,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="237"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                        <state key="normal" title="Click to Add Memory Image">
+                                        <state key="normal" title="Tap to Add Memory Image!">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>

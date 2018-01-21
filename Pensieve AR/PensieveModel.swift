@@ -34,4 +34,26 @@ class PensieveModel {
         // Create a storage reference from our storage service
         storageRef = storage.reference()
     }
+    
+    func encodeForFirebaseKey(string: String) -> (String){
+        var string1 = string.replacingOccurrences(of: "_", with: "__")
+        string1 = string1.replacingOccurrences(of: ".", with: "_P")
+        string1 = string1.replacingOccurrences(of: "$", with: "_D")
+        string1 = string1.replacingOccurrences(of: "#", with: "_H")
+        string1 = string1.replacingOccurrences(of: "[", with: "_O")
+        string1 = string1.replacingOccurrences(of: "]", with: "_C")
+        string1 = string1.replacingOccurrences(of: "/", with: "_S")
+        return string1
+    }
+    
+    func decodeFromFireBaseKey (string: String) -> (String) {
+        var string1 = string.replacingOccurrences(of: "__" , with: "_")
+        string1 = string1.replacingOccurrences(of: "_P", with: ".")
+        string1 = string1.replacingOccurrences(of: "_D", with: "$")
+        string1 = string1.replacingOccurrences(of: "_H", with: "#")
+        string1 = string1.replacingOccurrences(of: "_O", with: "[")
+        string1 = string1.replacingOccurrences(of: "_C", with: "]")
+        string1 = string1.replacingOccurrences(of: "_S", with: "/")
+        return string1
+    }
 }

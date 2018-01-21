@@ -25,6 +25,7 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addmemoryImageButton.titleLabel?.text = "Click to Add Memory Image"
         imagePicker.delegate = self
         locationManager.requestWhenInUseAuthorization()
         SharedPensieveModel.initializeFirebaseStorage()
@@ -36,7 +37,6 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
         }
         
         memoryCaptionTextView.delegate = self
-        memoryCaptionTextView.returnKeyType = .done
         memoryCaptionTextView.text = "Enter caption here..."
         memoryCaptionTextView.textColor = UIColor.lightGray
         
@@ -44,7 +44,27 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
     }
     
     @IBAction func takePhotoTapped(_ sender: AnyObject) {
-        takePicture()
+        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            
+            let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { _ in
+                self.takePicture()
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { _ in
+                self.takeVideo()
+            }))
+            
+            alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+            self.openGallary()
+        }))
+        
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     //https://makeapppie.com/2016/06/28/how-to-use-uiimagepickercontroller-for-a-camera-and-photo-library-in-swift-3-0/
@@ -58,6 +78,25 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
         }else {
             noCamera()
         }
+    }
+    
+    func takeVideo() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            imagePicker.allowsEditing = false
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+            imagePicker.cameraCaptureMode = .video
+            imagePicker.modalPresentationStyle = .fullScreen
+            present(imagePicker,animated: true,completion: nil)
+        }else {
+            noCamera()
+        }
+    }
+    
+    func openGallary()
+    {
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        imagePicker.allowsEditing = true
+        self.present(imagePicker, animated: true, completion: nil)
     }
 
     //https://makeapppie.com/2016/06/28/how-to-use-uiimagepickercontroller-for-a-camera-and-photo-library-in-swift-3-0/
@@ -86,8 +125,6 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
         addmemoryImageButton.backgroundColor = .clear
         addmemoryImageButton.titleLabel?.text = ""
         
-        print("here here here")
-        
         dismiss(animated: true, completion: nil)
         
     }
@@ -101,68 +138,53 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
         let caption = memoryCaptionTextView.text
         let image = memoryImageView.image
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        
         // TODO: make POST call to post memory to Firebase
-       print(caption)
-        SharedPensieveModel.ref.child("memories").child(memoryID).child("caption").setValue(caption)
+        if (image != nil) {
+            // post image
+            if let uploadData = UIImageJPEGRepresentation(image!, 0.1) {
+                let tempImageName = NSUUID().uuidString
+                SharedPensieveModel.storageRef.child("images").child("\(tempImageName).png").putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                    if error != nil {
+                        print (error ?? "Error")
+                        return
+                    }
+                    //save the firebase image url in order to download the image later
+                    let tempSavedImageURL = (metadata?.downloadURL()?.absoluteString)!
+                    print(tempSavedImageURL)
+                    self.SharedPensieveModel.ref.child("memories").child(memoryID).child("imageURL").setValue(tempSavedImageURL)
+                    
+                    /*
+                     // Success alert
+                     let alert = SCLAlertView()
+                     alert.addButton("Okay") {
+                     self.navigationController?.popViewController(animated: true)
+                     }
+                     alert.showSuccess("Memory added!")
+                    */
+                })
+            } else {
+                print("post image didnt work")
+            }
+        } else {
+            /*
+             let alert = SCLAlertView()
+             alert.addButton("Add Memory Without Caption") {
+             print("Add Memory Without Caption")
+             }
+             alert.addButton("Add image to my post!") {
+             takePicture()
+             }
+             alert.showInfo("Did you mean to post a caption without an image?")
+             */
+        }
+        //SharedPensieveModel.ref.child("memories").child(memoryID).child("caption").setValue(caption)
+        
         if let location = locationManager.location {
             print(location.coordinate)
             let geoFire = GeoFire(firebaseRef: SharedPensieveModel.ref.child("memories"))
             geoFire?.setLocation(CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude), forKey: memoryID)
         } else {
             print("whoops")
-        }
-        
-        
-        if (image != nil) {
-            // post image
-            if let uploadData = UIImageJPEGRepresentation(image!, 0.1) {
-                let tempImageName = NSUUID().uuidString
-               SharedPensieveModel.storageRef.child("images").child("\(tempImageName).png").putData(uploadData, metadata: nil, completion: { (metadata, error) in
-                    if error != nil {
-                        print (error ?? "Error")
-                        return
-                    }
-                
-                    //save the firebase image url in order to download the image later
-                    let tempSavedImageURL = (metadata?.downloadURL()?.absoluteString)!
-                    print(tempSavedImageURL)
-                self.SharedPensieveModel.ref.child("memories").child(memoryID).child("imageURL").setValue(tempSavedImageURL)
-                /*
-                // Success alert
-                let alert = SCLAlertView()
-                alert.addButton("Okay") {
-                    self.navigationController?.popViewController(animated: true)
-                }
-                alert.showSuccess("Memory added!") */
-                })
-            } else {
-                print("post image didnt work")
-                /*
-                //upload to firebase
-                self.ref.child("parties").child(partyID).setValue(newParty.toAnyObject())
-                
-                //pull from firebase to make new party and add to local parties
-                self.ref.child("parties").queryEqual(toValue: partyID).observeSingleEvent(of: .value, with: { (snapshot) in
-                    let p = Party(snapshot: snapshot)
-                    self.parties.append(p)
-                }){ (error) in
-                    print(error.localizedDescription)
-                }
-                */
-            }
-        } else {
-                /*
-            let alert = SCLAlertView()
-            alert.addButton("Add Memory Without Caption") {
-                print("Add Memory Without Caption")
-                
-            }
-            alert.addButton("Add image to my post!") {
-                takePicture()
-            }
-            alert.showInfo("Did you mean to post a caption without an image?")
- */
         }
     }
     
@@ -211,6 +233,16 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
     {
         textField.resignFirstResponder()
         return true
+    }
+    func encodeForFirebaseKey(string: String) -> (String){
+        var string1 = string.replacingOccurrences(of: "_", with: "__")
+        string1 = string1.replacingOccurrences(of: ".", with: "_P")
+        string1 = string1.replacingOccurrences(of: "$", with: "_D")
+        string1 = string1.replacingOccurrences(of: "#", with: "_H")
+        string1 = string1.replacingOccurrences(of: "[", with: "_O")
+        string1 = string1.replacingOccurrences(of: "]", with: "_C")
+        string1 = string1.replacingOccurrences(of: "/", with: "_S")
+        return string1
     }
 }
 
