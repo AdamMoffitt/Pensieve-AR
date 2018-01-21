@@ -150,14 +150,15 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
                     }
                     //save the firebase image url in order to download the image later
                     let tempSavedImageURL = (metadata?.downloadURL()?.absoluteString)!
-                    print(tempSavedImageURL)
+                    print("temp saved url: \(tempSavedImageURL)")
                     self.SharedPensieveModel.ref.child("memories").child(memoryID).child("imageURL").setValue(tempSavedImageURL)
-                    
+                    print("write temp saved url: \(memoryID)")
+                        self.navigationController?.popViewController(animated: true)
                     /*
                      // Success alert
                      let alert = SCLAlertView()
                      alert.addButton("Okay") {
-                     self.navigationController?.popViewController(animated: true)
+                     
                      }
                      alert.showSuccess("Memory added!")
                     */
@@ -178,11 +179,11 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
              */
         }
         //SharedPensieveModel.ref.child("memories").child(memoryID).child("caption").setValue(caption)
-        
-        if let location = locationManager.location {
-            print(location.coordinate)
-            let geoFire = GeoFire(firebaseRef: SharedPensieveModel.ref.child("memories"))
+        if let location = self.locationManager.location {
+            //print(location.coordinate)
+            let geoFire = GeoFire(firebaseRef: self.SharedPensieveModel.ref.child("memories"))
             geoFire?.setLocation(CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude), forKey: memoryID)
+            print("write geofire location: \(memoryID)")
         } else {
             print("whoops")
         }
