@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -70,11 +71,18 @@
                         <viewLayoutGuide key="safeArea" id="rbt-vC-OPa"/>
                     </view>
                     <navigationItem key="navigationItem" title="Pensieve AR" id="mjj-N2-KCY">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="6KW-Zr-m2w">
-                            <connections>
-                                <segue destination="qb9-XJ-0wm" kind="show" id="hzA-IS-2YC"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="6KW-Zr-m2w">
+                                <connections>
+                                    <segue destination="qb9-XJ-0wm" kind="show" id="hzA-IS-2YC"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="refresh" id="Cb4-ic-eIE">
+                                <connections>
+                                    <action selector="refreshButtonPressed:" destination="6JS-xa-KTj" id="WXk-RP-ekr"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="addMemoryButton" destination="7PB-6e-35e" id="xu6-EZ-9xj"/>

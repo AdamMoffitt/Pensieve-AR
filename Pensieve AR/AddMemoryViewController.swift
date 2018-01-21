@@ -47,16 +47,17 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
         let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
             
-            let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
-            alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { _ in
+            let alert2 = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
+            alert2.addAction(UIAlertAction(title: "Photo", style: .default, handler: { _ in
                 self.takePicture()
             }))
             
-            alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { _ in
+            alert2.addAction(UIAlertAction(title: "Video", style: .default, handler: { _ in
                 self.takeVideo()
             }))
             
-            alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+            alert2.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert2, animated: true, completion: nil)
         }))
         
         alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in

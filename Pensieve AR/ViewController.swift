@@ -29,6 +29,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     var SharedPensieveModel : PensieveModel? = nil
     var currentLocation : CLLocation = CLLocation()
     
+    var listOftempURLs: Set = [""]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Set the view's delegate
@@ -75,34 +77,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         SharedPensieveModel = PensieveModel.shared
         
         // Get Instagram images
-         // pullYourCrapDown(latitude: locationManager.location?.coordinate.latitude, longitude: locationManager.location?.coordinate.longitude)
+        pullYourCrapDown(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
         
-        let currentLocation = locationManager.location
-        let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
-        var circleQuery = geoFire?.query(at: currentLocation, withRadius: 0.02)
-        var queryHandle = circleQuery?.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
-            //print("Key '\(key!)' entered the search area and is at location '\(location!)'")
-            
-            let tempRef = self.SharedPensieveModel?.ref.child("memories").child(key)
-            tempRef?.observeSingleEvent(of: .value, with: { (snapshot) in
-                // Get user value
-                let value = snapshot.value as? NSDictionary
-                print("snapshot: \(String(describing: value))")
-                let imageTempURL = value?["imageURL"] as? String ?? ""
-                if ( imageTempURL != nil && imageTempURL != "") {
-                    print("received url: \(imageTempURL)")
-                    if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
-                        if (data != nil) {
-                            let image = UIImage(data: data)
-                            self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-                        }
-                    }
-                }
-            }) { (error) in
-                print("ERROR: \(error.localizedDescription)")
-            }
-        })
-       
+        /*
         setImage(image: UIImage(named: "Add")!, latitude: 35.6337652, longitude: -119.7095671)
         
         let southCoordinate = CLLocationCoordinate2D(latitude: 33.5232333, longitude: -121.1803068)
@@ -122,8 +99,55 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         let westImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
         let westAnnotationNode = LocationAnnotationNode(location: westLocation, image: westImage)
         sceneView.addLocationNodeWithConfirmedLocation(locationNode: westAnnotationNode)
+        */
         
         view.addSubview(sceneView)
+    }
+    
+    @IBAction func refreshButtonPressed(_ sender: Any) {
+        let currentLocation = locationManager.location
+        let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
+        var circleQuery = geoFire?.query(at: currentLocation, withRadius: 0.02)
+        var queryHandle = circleQuery?.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
+            print("Key '\(key!)' entered the search area and is at location '\(location!)'")
+            
+            let tempRef = self.SharedPensieveModel?.ref.child("memories").child(key)
+            tempRef?.observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                let value = snapshot.value as? NSDictionary
+                print("snapshot: \(String(describing: value))")
+                let imageTempURL = value?["imageURL"] as? String ?? ""
+                if ( imageTempURL != nil && imageTempURL != "") {
+                    print("received url: \(imageTempURL)")
+                    if (!self.listOftempURLs.contains(imageTempURL)) {
+                    if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
+                        if (data != nil) {
+                            let image = UIImage(data: data)
+                            //self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                            
+                            let node = SCNNode()
+                            node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
+                            let targetNode = SCNNode()
+                            let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
+                            targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
+                            let lookat = SCNLookAtConstraint(target: targetNode)
+                            node.constraints = [lookat]
+                            node.geometry?.firstMaterial?.diffuse.contents = image
+                            node.position = SCNVector3(CGFloat( 10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                                       CGFloat(y_val),
+                                                       CGFloat(10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                            self.sceneView.scene.rootNode.addChildNode(node)
+                            self.listOftempURLs.insert(imageTempURL)
+                            
+                        }
+                    }
+                    }
+                }
+            }) { (error) in
+                print("ERROR: \(error.localizedDescription)")
+            }
+        })
+
     }
     
     func setImage(image: UIImage, latitude: Double, longitude: Double) {
@@ -131,6 +155,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         let imageLocation = CLLocation(coordinate: imageCoordinate, altitude: 10)
         self.resizeImage(image: image, targetSize: CGSize(width: 90.0, height: 90.0))
         let annotationNode = LocationAnnotationNode(location: imageLocation, image: image)
+        annotationNode.scaleRelativeToDistance = true
         self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
         print("****ADDED PHOTO NODE****** at \(latitude), \(longitude)")
         //sceneView.run()
