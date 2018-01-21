@@ -46,8 +46,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         text.materials = [material]
         
         let node = SCNNode()
-        node.position = SCNVector3(x: 0, y: 0, z: -1)
-        node.scale = SCNVector3(x: 0.1, y: 0.1, z: 0.05)
+        node.position = SCNVector3(x: 0, y: 0, z: -5)
+        node.scale = SCNVector3(x: 0.05, y: 0.05, z: 0.02)
         node.geometry = text
         
         sceneView.scene.rootNode.addChildNode(node)
