@@ -120,18 +120,29 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     }
     
     @IBAction func instagramButtonPressed(_ sender: Any) {
-        self.instagramOn = !self.instagramOn
         
         if (self.instagramOn) {
+            let alertController = UIAlertController(title: "Instagram Memories Disabled!", message: "",
+                                                    preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
             for node in self.listOfNodes {
                 node.opacity = 0
             }
         } else {
+            let alertController = UIAlertController(title: "Instagram Memories Enabled!",message:"",
+                                                    preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
             for node in self.listOfNodes {
                 node.opacity = 1
             }
         }
-        
+        self.instagramOn = !self.instagramOn
     }
     
     @IBAction func refreshButtonPressed(_ sender: Any) {
@@ -152,10 +163,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                     if (!self.listOftempURLs.contains(imageTempURL)) {
                     if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
                         if (data != nil) {
-                            let image = UIImage(data: data)
+                            var image = UIImage(data: data)
                             image?.resize(toTargetSize: CGSize(width: 640, height: 640))
                             //self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-                            
+                            image = self.orientImage(image: image!)
+                            //print("IMAGE ORIENTATION: \((image?.imageOrientation)!.rawValue)")
                             let node = SCNNode()
                             node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
                             let targetNode = SCNNode()
@@ -164,9 +176,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                             let lookat = SCNLookAtConstraint(target: targetNode)
                             node.constraints = [lookat]
                             node.geometry?.firstMaterial?.diffuse.contents = image
-                            node.position = SCNVector3(CGFloat( 10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                            node.position = SCNVector3(CGFloat( 2.0 - 6.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
                                                        CGFloat(y_val),
-                                                       CGFloat(10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                                       CGFloat(2.0 - 6.0*(Float(arc4random()) / Float(UINT32_MAX))))
                             self.sceneView.scene.rootNode.addChildNode(node)
                             self.listOftempURLs.insert(imageTempURL)
                             
@@ -191,6 +203,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
         print("****ADDED PHOTO NODE****** at \(latitude), \(longitude)")
         //sceneView.run()
+    }
+    
+    
+    func orientImage(image: UIImage) -> UIImage {
+        if (image.imageOrientation.rawValue == 3) { //rotate right
+            return image.rotated(by: Measurement(value: 90, unit: .degrees))!
+        } else if (image.imageOrientation.rawValue == 4){ // rotate left
+            return image.rotated(by: Measurement(value: -90, unit: .degrees))!
+        } else if (image.imageOrientation.rawValue == 2) { // upside down
+            return image.rotated(by: Measurement(value: 180, unit: .degrees))!
+        }
+            return image
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -314,25 +338,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         completionHandler([.alert, .sound])
     }
     
-    /* TODO!!!!!!!!!!!!!1
+    /*
     func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation]) {
         let latestLocation: CLLocation = locations[locations.count - 1]
         let latitude = String(latestLocation.coordinate.latitude)
         let longitude = String(latestLocation.coordinate.longitude)
-        //print("\(latitude) \(longitude)")
-        notifyUpdateLocation()
+        print("NOTIFY LOCATION CHANGED \(latitude) \(longitude)")
+        //notifyUpdateLocation()
         
-        // let distanceTravelled = latestLocation.distance(from: currentLocation)
-        // if (distanceTravelled.magnitude > 100 ) {
-            currentLocation = latestLocation
-            let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
-            // Query locations at [37.7832889, -122.4056973] with a radius of 600 meters
-            var circleQuery = geoFire?.query(at: latestLocation, withRadius: 0.01)
-            var queryHandle = circleQuery?.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
-                //print("Key '\(key!)' entered the search area and is at location '\(location!)'")
-                    let tempRef = self.SharedPensieveModel?.ref.child("memories").child(key)
-            })
+        //getInstagramMemories(latitude: latestLocation.coordinate.latitude, longitude: latestLocation.coordinate.longitude)
         }
     //}
  */
@@ -450,10 +465,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                                             let image = UIImage(data: data)
                                             node.geometry?.firstMaterial?.diffuse.contents = image
                                         }
-                                        node.position = SCNVector3(CGFloat( 10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                        node.position = SCNVector3(CGFloat( 2.0 - 9.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
                                                                    CGFloat(y_val),
-                                                                   CGFloat(10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX))))
-                                        node.opacity = 0
+                                                                   CGFloat(2.0 - 9.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                        if (self.instagramOn) {
+                                            node.opacity = 1
+                                        } else {
+                                            node.opacity = 0
+                                        }
                                         self.sceneView.scene.rootNode.addChildNode(node)
                                     }
                                 }
@@ -562,6 +581,37 @@ extension UIImage {
         }
         
         return newImage
+    }
+}
+
+extension UIImage {
+    struct RotationOptions: OptionSet {
+        let rawValue: Int
+        
+        static let flipOnVerticalAxis = RotationOptions(rawValue: 1)
+        static let flipOnHorizontalAxis = RotationOptions(rawValue: 2)
+    }
+    
+    func rotated(by rotationAngle: Measurement<UnitAngle>, options: RotationOptions = []) -> UIImage? {
+        guard let cgImage = self.cgImage else { return nil }
+        
+        let rotationInRadians = CGFloat(rotationAngle.converted(to: .radians).value)
+        let transform = CGAffineTransform(rotationAngle: rotationInRadians)
+        var rect = CGRect(origin: .zero, size: self.size).applying(transform)
+        rect.origin = .zero
+        
+        let renderer = UIGraphicsImageRenderer(size: rect.size)
+        return renderer.image { renderContext in
+            renderContext.cgContext.translateBy(x: rect.midX, y: rect.midY)
+            renderContext.cgContext.rotate(by: rotationInRadians)
+            
+            let x = options.contains(.flipOnVerticalAxis) ? -1.0 : 1.0
+            let y = options.contains(.flipOnHorizontalAxis) ? 1.0 : -1.0
+            renderContext.cgContext.scaleBy(x: CGFloat(x), y: CGFloat(y))
+            
+            let drawRect = CGRect(origin: CGPoint(x: -self.size.width/2, y: -self.size.height/2), size: self.size)
+            renderContext.cgContext.draw(cgImage, in: drawRect)
+        }
     }
 }
 
