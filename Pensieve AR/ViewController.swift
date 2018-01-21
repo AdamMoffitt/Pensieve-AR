@@ -30,7 +30,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     var currentLocation : CLLocation = CLLocation()
     
     var listOftempURLs: Set = [""]
-    
+    var listOfNodes: Array = [SCNNode()]
+    var instagramOn = false
     override func viewDidLoad() {
         super.viewDidLoad()
         // Set the view's delegate
@@ -49,6 +50,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         node.position = SCNVector3(x: 0, y: 0, z: -5)
         node.scale = SCNVector3(x: 0.05, y: 0.05, z: 0.02)
         node.geometry = text
+        
+        DispatchQueue.main.async {
+            sleep(5)
+            var i = 1.0
+            while (i > 0) {
+                i = i-0.01
+                node.opacity = 0
+                sleep(UInt32(0.1))
+            }
+        }
         
         sceneView.scene.rootNode.addChildNode(node)
         sceneView.autoenablesDefaultLighting = true
@@ -72,6 +83,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         }
         
         self.navigationController?.navigationBar.alpha = 0.5
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
         self.navigationController?.title = "Pensieve AR"
         
         SharedPensieveModel = PensieveModel.shared
@@ -106,6 +119,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         view.addSubview(sceneView)
     }
     
+    @IBAction func instagramButtonPressed(_ sender: Any) {
+        self.instagramOn = !self.instagramOn
+        
+        if (self.instagramOn) {
+            for node in self.listOfNodes {
+                node.opacity = 0
+            }
+        } else {
+            for node in self.listOfNodes {
+                node.opacity = 1
+            }
+        }
+        
+    }
+    
     @IBAction func refreshButtonPressed(_ sender: Any) {
         let currentLocation = locationManager.location
         let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
@@ -125,6 +153,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                     if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
                         if (data != nil) {
                             let image = UIImage(data: data)
+                            image?.resize(toTargetSize: CGSize(width: 640, height: 640))
                             //self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                             
                             let node = SCNNode()
@@ -157,6 +186,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         let imageLocation = CLLocation(coordinate: imageCoordinate, altitude: 10)
         self.resizeImage(image: image, targetSize: CGSize(width: 90.0, height: 90.0))
         let annotationNode = LocationAnnotationNode(location: imageLocation, image: image)
+        listOfNodes.append(annotationNode)
         annotationNode.scaleRelativeToDistance = true
         self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
         print("****ADDED PHOTO NODE****** at \(latitude), \(longitude)")
@@ -166,6 +196,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.alpha = 0.5
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
         self.navigationController?.title = "Pensieve AR"
         //self.navigationController?.isNavigationBarHidden = true
         guard ARWorldTrackingConfiguration.isSupported else {
@@ -384,8 +416,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                                 if let data = try? Data(contentsOf: URL(string: url)!) {
                                     if (data != nil) {
                                         
-                                        
                                         let node = SCNNode()
+                                        self.listOfNodes.append(node)
                                         node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
                                         let targetNode = SCNNode()
                                         let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
@@ -421,6 +453,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                                         node.position = SCNVector3(CGFloat( 10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
                                                                    CGFloat(y_val),
                                                                    CGFloat(10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                        node.opacity = 0
                                         self.sceneView.scene.rootNode.addChildNode(node)
                                     }
                                 }
@@ -467,7 +500,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                                 if let data = try? Data(contentsOf: URL(string: imageUrl)!) {
                                     if (data != nil) {
                                     let image = UIImage(data: data)
-                                        
+                                        image?.resize(toTargetSize: CGSize(width: 640, height: 640))
                                         let node = SCNNode()
                                         node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
                                         let targetNode = SCNNode()
@@ -476,9 +509,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                                         let lookat = SCNLookAtConstraint(target: targetNode)
                                         node.constraints = [lookat]
                                         node.geometry?.firstMaterial?.diffuse.contents = image
-                                        node.position = SCNVector3(CGFloat( 10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                        node.position = SCNVector3(CGFloat( 5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
                                                                    CGFloat(y_val),
-                                                                   CGFloat(10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                                                   CGFloat(5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX))))
                                         self.sceneView.scene.rootNode.addChildNode(node)
                                     }
                                 }
@@ -494,8 +527,41 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         }
         
         task.resume()
- 
     }
+}
 
+extension UIImage {
+    
+    func resize(toTargetSize targetSize: CGSize) -> UIImage {
+        // inspired by Hamptin Catlin
+        // https://gist.github.com/licvido/55d12a8eb76a8103c753
+        
+        let newScale = self.scale // change this if you want the output image to have a different scale
+        let originalSize = self.size
+        
+        let widthRatio = targetSize.width / originalSize.width
+        let heightRatio = targetSize.height / originalSize.height
+        
+        // Figure out what our orientation is, and use that to form the rectangle
+        let newSize: CGSize
+        if widthRatio > heightRatio {
+            newSize = CGSize(width: floor(originalSize.width * heightRatio), height: floor(originalSize.height * heightRatio))
+        } else {
+            newSize = CGSize(width: floor(originalSize.width * widthRatio), height: floor(originalSize.height * widthRatio))
+        }
+        
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(origin: .zero, size: newSize)
+        
+        // Actually do the resizing to the rect using the ImageContext stuff
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = newScale
+        format.opaque = true
+        let newImage = UIGraphicsImageRenderer(bounds: rect, format: format).image() { _ in
+            self.draw(in: rect)
+        }
+        
+        return newImage
+    }
 }
 

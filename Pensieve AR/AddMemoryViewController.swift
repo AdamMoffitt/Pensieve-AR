@@ -138,6 +138,7 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
         let memoryID = NSUUID().uuidString
         let caption = memoryCaptionTextView.text
         let image = memoryImageView.image
+        image?.resize(toTargetSize: CGSize(width: 640, height: 640))
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         // TODO: make POST call to post memory to Firebase
         if (image != nil) {

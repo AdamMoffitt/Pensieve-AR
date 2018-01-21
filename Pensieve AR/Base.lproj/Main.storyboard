@@ -71,6 +71,11 @@
                         <viewLayoutGuide key="safeArea" id="rbt-vC-OPa"/>
                     </view>
                     <navigationItem key="navigationItem" title="Pensieve AR" id="mjj-N2-KCY">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="instagram" id="5Re-6x-hO2">
+                            <connections>
+                                <action selector="instagramButtonPressed:" destination="6JS-xa-KTj" id="ReI-YU-G0W"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="6KW-Zr-m2w">
                                 <connections>
@@ -239,6 +244,7 @@
     </scenes>
     <resources>
         <image name="Add" width="512" height="512"/>
+        <image name="instagram" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="v0q-Yl-QRw"/>
