@@ -31,10 +31,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sceneView.run()
         // Set the view's delegate
         sceneView.delegate = self
         
+        sceneView = SceneLocationView()
+        let addMemoryButton1 = UIButton(frame: CGRect(x: 146, y: 300, width: 76, height: 71))
+        addMemoryButton1.imageView?.image = UIImage(named: "Add")
         let text = SCNText(string: "Pensieve AR", extrusionDepth: 5)
         
         let material = SCNMaterial()
@@ -74,7 +76,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         
         // Get Instagram images
          // pullYourCrapDown(latitude: locationManager.location?.coordinate.latitude, longitude: locationManager.location?.coordinate.longitude)
-        /*
+        
         let currentLocation = locationManager.location
         let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
         var circleQuery = geoFire?.query(at: currentLocation, withRadius: 0.02)
@@ -91,53 +93,47 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                     print("received url: \(imageTempURL)")
                     if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
                         if (data != nil) {
-                            //let image = UIImage(data: data)
-                            
-                            let image = UIImage(named: "Add")
-                            self.resizeImage(image: UIImage(data: data)!, targetSize: CGSize(width: 900.0, height: 900.0))
-                            let annotationNode = LocationAnnotationNode(location: location, image: image!)
-                            annotationNode.scaleRelativeToDistance = false
-                            self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
-                            print("****ADDED PHOTO NODE****** at \(location.coordinate)")
+                            let image = UIImage(data: data)
+                            self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                         }
                     }
                 }
             }) { (error) in
-                print(error.localizedDescription)
+                print("ERROR: \(error.localizedDescription)")
             }
-        }) */
-        
-        let coordinate = CLLocationCoordinate2D(latitude: 51.504571, longitude: -0.019717)
-        let location = CLLocation(coordinate: coordinate, altitude: 20)
-        let image = UIImage(named: "purpleAdd")!
-        
-        let annotationNode = LocationAnnotationNode(location: location, image: image)
-        sceneView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
-        
-        let northCoordinate = CLLocationCoordinate2D(latitude: 35.6337652, longitude: -119.7095671)
-        let northLocation = CLLocation(coordinate: northCoordinate, altitude: 10)
-        let northImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
-        let northAnnotationNode = LocationAnnotationNode(location: northLocation, image: northImage)
-        sceneView.addLocationNodeWithConfirmedLocation(locationNode: northAnnotationNode)
+        })
+       
+        setImage(image: UIImage(named: "Add")!, latitude: 35.6337652, longitude: -119.7095671)
         
         let southCoordinate = CLLocationCoordinate2D(latitude: 33.5232333, longitude: -121.1803068)
         let southLocation = CLLocation(coordinate: southCoordinate, altitude: 10)
         let southImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
         let southAnnotationNode = LocationAnnotationNode(location: southLocation, image: southImage)
         sceneView.addLocationNodeWithConfirmedLocation(locationNode: southAnnotationNode)
-        
+
         let eastCoordinate = CLLocationCoordinate2D(latitude: 34.3183504, longitude: -118.1399376)
         let eastLocation = CLLocation(coordinate: eastCoordinate, altitude: 10)
         let eastImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
         let eastAnnotationNode = LocationAnnotationNode(location: eastLocation, image: eastImage)
         sceneView.addLocationNodeWithConfirmedLocation(locationNode: eastAnnotationNode)
-        
+
         let westCoordinate = CLLocationCoordinate2D(latitude: 34.4540648, longitude: -120.4625968)
         let westLocation = CLLocation(coordinate: westCoordinate, altitude: 10)
         let westImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
         let westAnnotationNode = LocationAnnotationNode(location: westLocation, image: westImage)
         sceneView.addLocationNodeWithConfirmedLocation(locationNode: westAnnotationNode)
         
+        view.addSubview(sceneView)
+    }
+    
+    func setImage(image: UIImage, latitude: Double, longitude: Double) {
+        let imageCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let imageLocation = CLLocation(coordinate: imageCoordinate, altitude: 10)
+        self.resizeImage(image: image, targetSize: CGSize(width: 90.0, height: 90.0))
+        let annotationNode = LocationAnnotationNode(location: imageLocation, image: image)
+        self.sceneView.addLocationNodeWithConfirmedLocation(locationNode: annotationNode)
+        print("****ADDED PHOTO NODE****** at \(latitude), \(longitude)")
+        //sceneView.run()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -163,7 +159,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
          */
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
-        sceneView.session.run(configuration)
         
         // Set a delegate to track the number of plane anchors for providing UI feedback.
         sceneView.session.delegate = self
@@ -173,6 +168,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
          have long periods of interaction without touching the screen or buttons.
          */
         UIApplication.shared.isIdleTimerDisabled = true
+        
+        sceneView.session.run(configuration)
+        sceneView.run()
     }
     
     override func viewDidLayoutSubviews() {

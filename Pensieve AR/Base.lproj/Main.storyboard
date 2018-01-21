@@ -69,7 +69,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="rbt-vC-OPa"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Pensieve AR" id="mjj-N2-KCY"/>
+                    <navigationItem key="navigationItem" title="Pensieve AR" id="mjj-N2-KCY">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="6KW-Zr-m2w">
+                            <connections>
+                                <segue destination="qb9-XJ-0wm" kind="show" id="hzA-IS-2YC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="addMemoryButton" destination="7PB-6e-35e" id="xu6-EZ-9xj"/>
                         <outlet property="sceneView" destination="w6z-vc-VEh" id="yVR-1V-HwM"/>
@@ -226,4 +232,7 @@
     <resources>
         <image name="Add" width="512" height="512"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="v0q-Yl-QRw"/>
+    </inferredMetricsTieBreakers>
 </document>
