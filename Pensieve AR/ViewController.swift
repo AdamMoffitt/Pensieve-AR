@@ -77,7 +77,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         SharedPensieveModel = PensieveModel.shared
         
         // Get Instagram images
-        pullYourCrapDown(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
+        //pullYourCrapDown(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
+        getInstagramMemories(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
+        
         
         /*
         setImage(image: UIImage(named: "Add")!, latitude: 35.6337652, longitude: -119.7095671)
@@ -354,6 +356,94 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         UIGraphicsEndImageContext()
         
         return newImage!
+    }
+    
+    func getInstagramMemories(latitude: Double, longitude: Double) {
+        print("pull christie's crap down")
+        let lat = String(latitude)
+        let long = String(longitude)
+        // let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instaImages?latitude=\(lat)&longitude=\(long)")
+        let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instagramLocationScraper?latitude=\(lat)&longitude=\(long)")
+        print(url)
+        
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            
+            if let data = data {
+                do {
+                    // Convert the data to JSON
+                    let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]]
+                    if let json = jsonSerialized {
+                        for item in json {
+                            let url = item["src"] as! String
+                            let isVideo = item["is_video"] as! Bool
+                            let caption = item["caption"] as! String
+                            print(url)
+                            print(isVideo)
+                            print(caption)
+                            if(url != nil) {
+                                if let data = try? Data(contentsOf: URL(string: url)!) {
+                                    if (data != nil) {
+                                        
+                                        
+                                        let node = SCNNode()
+                                        node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
+                                        let targetNode = SCNNode()
+                                        let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
+                                        targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
+                                        let lookat = SCNLookAtConstraint(target: targetNode)
+                                        node.constraints = [lookat]
+                                        if (isVideo){
+                                            let videoURL = URL(string: url)
+                                            let player = AVPlayer(url: videoURL!)
+                                            
+                                            // To make the video loop
+                                            player.actionAtItemEnd = .none
+                                            NotificationCenter.default.addObserver(
+                                                self,
+                                                selector: #selector(ViewController.playerItemDidReachEnd),
+                                                name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                                object: player.currentItem)
+                                            
+                                            let videoNode = SKVideoNode(avPlayer: player)
+                                            let size = CGSize(width: 1024, height: 512)
+                                            videoNode.size = size
+                                            videoNode.position = CGPoint(x: 512, y: 256)
+                                            videoNode.yScale = -1.0
+                                            let spriteScene = SKScene(size: size)
+                                            videoNode.play()
+                                            
+                                            spriteScene.addChild(videoNode)
+                                            node.geometry?.firstMaterial?.diffuse.contents = spriteScene
+                                        } else {
+                                            let image = UIImage(data: data)
+                                            node.geometry?.firstMaterial?.diffuse.contents = image
+                                        }
+                                        node.position = SCNVector3(CGFloat( 10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                                                   CGFloat(y_val),
+                                                                   CGFloat(10.0 - 20.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                        self.sceneView.scene.rootNode.addChildNode(node)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }  catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+        
+        task.resume()
+        
+        
+    }
+    
+    @objc func playerItemDidReachEnd(notification: NSNotification) {
+        if let playerItem: AVPlayerItem = notification.object as? AVPlayerItem {
+            playerItem.seek(to: kCMTimeZero)
+        }
     }
     
     func pullYourCrapDown(latitude: Double, longitude: Double) {
