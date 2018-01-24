@@ -10,7 +10,8 @@
 #endif
 #endif
 
+#import "KGFloatingDrawer.h"
 
-FOUNDATION_EXPORT double KYDrawerControllerVersionNumber;
-FOUNDATION_EXPORT const unsigned char KYDrawerControllerVersionString[];
+FOUNDATION_EXPORT double KGFloatingDrawerVersionNumber;
+FOUNDATION_EXPORT const unsigned char KGFloatingDrawerVersionString[];
 

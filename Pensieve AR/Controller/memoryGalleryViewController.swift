@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  memoryGalleryViewController.swift
 //  Pensieve AR
 //
 //  Created by Adam Moffitt on 1/19/18.
@@ -16,7 +16,7 @@ import FirebaseDatabase
 import ARCL
 import MapKit
 
-class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
+class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var sessionInfoView: UIView!
     @IBOutlet weak var sessionInfoLabel: UILabel!
@@ -34,6 +34,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     var instagramOn = false
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(100)
         // Set the view's delegate
         sceneView.delegate = self
         
@@ -91,32 +92,39 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         
         // Get Instagram images
         //pullYourCrapDown(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
+        getProfileImages()
         getInstagramMemories(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
         
         
         /*
-        setImage(image: UIImage(named: "Add")!, latitude: 35.6337652, longitude: -119.7095671)
-        
-        let southCoordinate = CLLocationCoordinate2D(latitude: 33.5232333, longitude: -121.1803068)
-        let southLocation = CLLocation(coordinate: southCoordinate, altitude: 10)
-        let southImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
-        let southAnnotationNode = LocationAnnotationNode(location: southLocation, image: southImage)
-        sceneView.addLocationNodeWithConfirmedLocation(locationNode: southAnnotationNode)
-
-        let eastCoordinate = CLLocationCoordinate2D(latitude: 34.3183504, longitude: -118.1399376)
-        let eastLocation = CLLocation(coordinate: eastCoordinate, altitude: 10)
-        let eastImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
-        let eastAnnotationNode = LocationAnnotationNode(location: eastLocation, image: eastImage)
-        sceneView.addLocationNodeWithConfirmedLocation(locationNode: eastAnnotationNode)
-
-        let westCoordinate = CLLocationCoordinate2D(latitude: 34.4540648, longitude: -120.4625968)
-        let westLocation = CLLocation(coordinate: westCoordinate, altitude: 10)
-        let westImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
-        let westAnnotationNode = LocationAnnotationNode(location: westLocation, image: westImage)
-        sceneView.addLocationNodeWithConfirmedLocation(locationNode: westAnnotationNode)
-        */
+         setImage(image: UIImage(named: "Add")!, latitude: 35.6337652, longitude: -119.7095671)
+         
+         let southCoordinate = CLLocationCoordinate2D(latitude: 33.5232333, longitude: -121.1803068)
+         let southLocation = CLLocation(coordinate: southCoordinate, altitude: 10)
+         let southImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
+         let southAnnotationNode = LocationAnnotationNode(location: southLocation, image: southImage)
+         sceneView.addLocationNodeWithConfirmedLocation(locationNode: southAnnotationNode)
+         
+         let eastCoordinate = CLLocationCoordinate2D(latitude: 34.3183504, longitude: -118.1399376)
+         let eastLocation = CLLocation(coordinate: eastCoordinate, altitude: 10)
+         let eastImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
+         let eastAnnotationNode = LocationAnnotationNode(location: eastLocation, image: eastImage)
+         sceneView.addLocationNodeWithConfirmedLocation(locationNode: eastAnnotationNode)
+         
+         let westCoordinate = CLLocationCoordinate2D(latitude: 34.4540648, longitude: -120.4625968)
+         let westLocation = CLLocation(coordinate: westCoordinate, altitude: 10)
+         let westImage = self.resizeImage(image: UIImage(named: "Add")!, targetSize: CGSize(width: 90.0, height: 90.0))
+         let westAnnotationNode = LocationAnnotationNode(location: westLocation, image: westImage)
+         sceneView.addLocationNodeWithConfirmedLocation(locationNode: westAnnotationNode)
+         */
         
         view.addSubview(sceneView)
+    }
+    
+    @IBAction func menuButtonPressed(_ sender: Any) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        print("toggle left 2")
+        appDelegate.toggleLeftDrawer(sender: sender as AnyObject, animated: true)
     }
     
     @IBAction func instagramButtonPressed(_ sender: Any) {
@@ -161,36 +169,36 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                 if ( imageTempURL != nil && imageTempURL != "") {
                     print("received url: \(imageTempURL)")
                     if (!self.listOftempURLs.contains(imageTempURL)) {
-                    if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
-                        if (data != nil) {
-                            var image = UIImage(data: data)
-                            image?.resize(toTargetSize: CGSize(width: 640, height: 640))
-                            //self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-                            image = self.orientImage(image: image!)
-                            //print("IMAGE ORIENTATION: \((image?.imageOrientation)!.rawValue)")
-                            let node = SCNNode()
-                            node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
-                            let targetNode = SCNNode()
-                            let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
-                            targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
-                            let lookat = SCNLookAtConstraint(target: targetNode)
-                            node.constraints = [lookat]
-                            node.geometry?.firstMaterial?.diffuse.contents = image
-                            node.position = SCNVector3(CGFloat( 2.0 - 6.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
-                                                       CGFloat(y_val),
-                                                       CGFloat(2.0 - 6.0*(Float(arc4random()) / Float(UINT32_MAX))))
-                            self.sceneView.scene.rootNode.addChildNode(node)
-                            self.listOftempURLs.insert(imageTempURL)
-                            
+                        if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
+                            if (data != nil) {
+                                var image = UIImage(data: data)
+                                image?.resize(toTargetSize: CGSize(width: 640, height: 640))
+                                //self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                                image = self.orientImage(image: image!)
+                                //print("IMAGE ORIENTATION: \((image?.imageOrientation)!.rawValue)")
+                                let node = SCNNode()
+                                node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
+                                let targetNode = SCNNode()
+                                let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
+                                targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
+                                let lookat = SCNLookAtConstraint(target: targetNode)
+                                node.constraints = [lookat]
+                                node.geometry?.firstMaterial?.diffuse.contents = image
+                                node.position = SCNVector3(CGFloat( 2.0 - 6.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                                           CGFloat(y_val),
+                                                           CGFloat(2.0 - 6.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                self.sceneView.scene.rootNode.addChildNode(node)
+                                self.listOftempURLs.insert(imageTempURL)
+                                
+                            }
                         }
-                    }
                     }
                 }
             }) { (error) in
                 print("ERROR: \(error.localizedDescription)")
             }
         })
-
+        
     }
     
     func setImage(image: UIImage, latitude: Double, longitude: Double) {
@@ -214,7 +222,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         } else if (image.imageOrientation.rawValue == 2) { // upside down
             return image.rotated(by: Measurement(value: 180, unit: .degrees))!
         }
-            return image
+        return image
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -271,14 +279,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     
     // MARK: - ARSCNViewDelegate
     
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
+    /*
+     // Override to create and configure nodes for anchors added to the view's session.
+     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+     let node = SCNNode()
      
-        return node
-    }
-*/
+     return node
+     }
+     */
     // MARK: - ARSessionObserver
     
     func sessionWasInterrupted(_ session: ARSession) {
@@ -339,18 +347,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     }
     
     /*
-    func locationManager(_ manager: CLLocationManager,
-                         didUpdateLocations locations: [CLLocation]) {
-        let latestLocation: CLLocation = locations[locations.count - 1]
-        let latitude = String(latestLocation.coordinate.latitude)
-        let longitude = String(latestLocation.coordinate.longitude)
-        print("NOTIFY LOCATION CHANGED \(latitude) \(longitude)")
-        //notifyUpdateLocation()
-        
-        //getInstagramMemories(latitude: latestLocation.coordinate.latitude, longitude: latestLocation.coordinate.longitude)
-        }
-    //}
- */
+     func locationManager(_ manager: CLLocationManager,
+     didUpdateLocations locations: [CLLocation]) {
+     let latestLocation: CLLocation = locations[locations.count - 1]
+     let latitude = String(latestLocation.coordinate.latitude)
+     let longitude = String(latestLocation.coordinate.longitude)
+     print("NOTIFY LOCATION CHANGED \(latitude) \(longitude)")
+     //notifyUpdateLocation()
+     
+     //getInstagramMemories(latitude: latestLocation.coordinate.latitude, longitude: latestLocation.coordinate.longitude)
+     }
+     //}
+     */
     
     func notifyMemoryFound(caption: String) {
         //print("memoryFound! should notify now")
@@ -406,12 +414,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
     }
     
     func getInstagramMemories(latitude: Double, longitude: Double) {
-        print("pull christie's crap down")
+        print("pull instagram down")
         let lat = String(latitude)
         let long = String(longitude)
         // let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instaImages?latitude=\(lat)&longitude=\(long)")
         let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instagramLocationScraper?latitude=\(lat)&longitude=\(long)")
-        print(url)
+        print(url ?? " ")
         
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             
@@ -419,6 +427,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                 do {
                     // Convert the data to JSON
                     let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]]
+                    print("json serialized: \(jsonSerialized)")
                     if let json = jsonSerialized {
                         for item in json {
                             let url = item["src"] as! String
@@ -443,14 +452,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                                             let videoURL = URL(string: url)
                                             let player = AVPlayer(url: videoURL!)
                                             
+                                            print(700)
                                             // To make the video loop
                                             player.actionAtItemEnd = .none
                                             NotificationCenter.default.addObserver(
                                                 self,
-                                                selector: #selector(ViewController.playerItemDidReachEnd),
+                                                selector: #selector(MemoryGalleryViewController.playerItemDidReachEnd),
                                                 name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                                                 object: player.currentItem)
                                             
+                                            print(800)
                                             let videoNode = SKVideoNode(avPlayer: player)
                                             let size = CGSize(width: 1024, height: 512)
                                             videoNode.size = size
@@ -498,6 +509,90 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
         }
     }
     
+    func getProfileImages() {
+        print("pull profile down")
+        let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instagramProfileScraper?profile=admoffitt15&n=15")
+        
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            
+            if let data = data {
+                do {
+                    // Convert the data to JSON
+                    let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]]
+                    print("json serialized: \(jsonSerialized)")
+                    if let json = jsonSerialized {
+                        for item in json {
+                            let url = item["src"] as! String
+                            let isVideo = item["is_video"] as! Bool
+                            let caption = item["caption"] as! String
+                            print(url)
+                            print(isVideo)
+                            print(caption)
+                            if(url != nil) {
+                                if let data = try? Data(contentsOf: URL(string: url)!) {
+                                    if (data != nil) {
+                                        
+                                        let node = SCNNode()
+                                        self.listOfNodes.append(node)
+                                        node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
+                                        let targetNode = SCNNode()
+                                        let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
+                                        targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
+                                        let lookat = SCNLookAtConstraint(target: targetNode)
+                                        node.constraints = [lookat]
+                                        if (isVideo){
+                                            let videoURL = URL(string: url)
+                                            let player = AVPlayer(url: videoURL!)
+                                            
+                                            print(700)
+                                            // To make the video loop
+                                            player.actionAtItemEnd = .none
+                                            NotificationCenter.default.addObserver(
+                                                self,
+                                                selector: #selector(MemoryGalleryViewController.playerItemDidReachEnd),
+                                                name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                                object: player.currentItem)
+                                            
+                                            print(800)
+                                            let videoNode = SKVideoNode(avPlayer: player)
+                                            let size = CGSize(width: 1024, height: 512)
+                                            videoNode.size = size
+                                            videoNode.position = CGPoint(x: 512, y: 256)
+                                            videoNode.yScale = -1.0
+                                            let spriteScene = SKScene(size: size)
+                                            videoNode.play()
+                                            
+                                            spriteScene.addChild(videoNode)
+                                            node.geometry?.firstMaterial?.diffuse.contents = spriteScene
+                                        } else {
+                                            let image = UIImage(data: data)
+                                            node.geometry?.firstMaterial?.diffuse.contents = image
+                                        }
+                                        node.position = SCNVector3(CGFloat( 2.0 - 9.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                                                   CGFloat(y_val),
+                                                                   CGFloat(2.0 - 9.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                        if (self.instagramOn) {
+                                            node.opacity = 1
+                                        } else {
+                                            node.opacity = 0
+                                        }
+                                        self.sceneView.scene.rootNode.addChildNode(node)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }  catch let error as NSError {
+                print(error.localizedDescription)
+                }
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+            }
+
+            task.resume()
+    }
+    
     func pullYourCrapDown(latitude: Double, longitude: Double) {
         print("pull christie's crap down")
         let lat = String(latitude)
@@ -518,7 +613,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, CL
                             if(imageUrl != nil) {
                                 if let data = try? Data(contentsOf: URL(string: imageUrl)!) {
                                     if (data != nil) {
-                                    let image = UIImage(data: data)
+                                        let image = UIImage(data: data)
                                         image?.resize(toTargetSize: CGSize(width: 640, height: 640))
                                         let node = SCNNode()
                                         node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
@@ -614,4 +709,5 @@ extension UIImage {
         }
     }
 }
+
 

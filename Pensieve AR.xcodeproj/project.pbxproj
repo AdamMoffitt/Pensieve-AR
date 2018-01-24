@@ -10,9 +10,13 @@
 		98D6820BFDD00FA0119C6548 /* Pods_Pensieve_AR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B32C1678D0F17188581DF64 /* Pods_Pensieve_AR.framework */; };
 		F56188962013B10500F856C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F56188952013B10500F856C2 /* GoogleService-Info.plist */; };
 		F56188982013B43100F856C2 /* PensieveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56188972013B43100F856C2 /* PensieveModel.swift */; };
+		F59F47BF2016AB6B004D19D3 /* MemoryGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59F47BE2016AB6B004D19D3 /* MemoryGalleryViewController.swift */; };
+		F59FCE6620168D3F0052BA27 /* LeftDrawerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59FCE6520168D3F0052BA27 /* LeftDrawerTableViewController.swift */; };
+		F59FCE6B20168F650052BA27 /* InstagramGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59FCE6A20168F650052BA27 /* InstagramGalleryViewController.swift */; };
+		F59FCE6F20168F9C0052BA27 /* PersonalGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59FCE6E20168F9C0052BA27 /* PersonalGalleryViewController.swift */; };
+		F59FCE74201690D30052BA27 /* citations in Resources */ = {isa = PBXBuildFile; fileRef = F59FCE73201690D30052BA27 /* citations */; };
 		F5A1718A2013236400440783 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A171892013236400440783 /* AppDelegate.swift */; };
 		F5A1718C2013236400440783 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = F5A1718B2013236400440783 /* art.scnassets */; };
-		F5A1718E2013236400440783 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A1718D2013236400440783 /* ViewController.swift */; };
 		F5A171912013236400440783 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5A1718F2013236400440783 /* Main.storyboard */; };
 		F5A171932013236400440783 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5A171922013236400440783 /* Assets.xcassets */; };
 		F5A171962013236400440783 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5A171942013236400440783 /* LaunchScreen.storyboard */; };
@@ -25,10 +29,14 @@
 		E1457DDFB536E2E1C1E00EF6 /* Pods-Pensieve AR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pensieve AR.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pensieve AR/Pods-Pensieve AR.release.xcconfig"; sourceTree = "<group>"; };
 		F56188952013B10500F856C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F56188972013B43100F856C2 /* PensieveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PensieveModel.swift; sourceTree = "<group>"; };
+		F59F47BE2016AB6B004D19D3 /* MemoryGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryGalleryViewController.swift; sourceTree = "<group>"; };
+		F59FCE6520168D3F0052BA27 /* LeftDrawerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftDrawerTableViewController.swift; sourceTree = "<group>"; };
+		F59FCE6A20168F650052BA27 /* InstagramGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstagramGalleryViewController.swift; sourceTree = "<group>"; };
+		F59FCE6E20168F9C0052BA27 /* PersonalGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalGalleryViewController.swift; sourceTree = "<group>"; };
+		F59FCE73201690D30052BA27 /* citations */ = {isa = PBXFileReference; lastKnownFileType = text; path = citations; sourceTree = "<group>"; };
 		F5A171862013236400440783 /* Pensieve AR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pensieve AR.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5A171892013236400440783 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5A1718B2013236400440783 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
-		F5A1718D2013236400440783 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F5A171902013236400440783 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F5A171922013236400440783 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F5A171952013236400440783 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -65,6 +73,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F59FCE6720168D4E0052BA27 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				F59FCE6520168D3F0052BA27 /* LeftDrawerTableViewController.swift */,
+				F59F47BE2016AB6B004D19D3 /* MemoryGalleryViewController.swift */,
+				F59FCE6A20168F650052BA27 /* InstagramGalleryViewController.swift */,
+				F5A1719D2013328C00440783 /* AddMemoryViewController.swift */,
+				F59FCE6E20168F9C0052BA27 /* PersonalGalleryViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		F5A1717D2013236300440783 = {
 			isa = PBXGroup;
 			children = (
@@ -88,12 +108,12 @@
 			children = (
 				F5A171892013236400440783 /* AppDelegate.swift */,
 				F5A1718B2013236400440783 /* art.scnassets */,
-				F5A1718D2013236400440783 /* ViewController.swift */,
+				F59FCE6720168D4E0052BA27 /* Controller */,
 				F5A1718F2013236400440783 /* Main.storyboard */,
-				F5A1719D2013328C00440783 /* AddMemoryViewController.swift */,
 				F5A171922013236400440783 /* Assets.xcassets */,
 				F5A171942013236400440783 /* LaunchScreen.storyboard */,
 				F5A171972013236400440783 /* Info.plist */,
+				F59FCE73201690D30052BA27 /* citations */,
 				F56188952013B10500F856C2 /* GoogleService-Info.plist */,
 				F56188972013B43100F856C2 /* PensieveModel.swift */,
 			);
@@ -135,6 +155,7 @@
 				TargetAttributes = {
 					F5A171852013236400440783 = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -165,6 +186,7 @@
 				F5A1718C2013236400440783 /* art.scnassets in Resources */,
 				F5A171962013236400440783 /* LaunchScreen.storyboard in Resources */,
 				F56188962013B10500F856C2 /* GoogleService-Info.plist in Resources */,
+				F59FCE74201690D30052BA27 /* citations in Resources */,
 				F5A171932013236400440783 /* Assets.xcassets in Resources */,
 				F5A171912013236400440783 /* Main.storyboard in Resources */,
 			);
@@ -185,6 +207,7 @@
 				"${BUILT_PRODUCTS_DIR}/GeoFire/GeoFire.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/KGFloatingDrawer/KGFloatingDrawer.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -195,6 +218,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GeoFire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KGFloatingDrawer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -244,8 +268,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5A1719E2013328C00440783 /* AddMemoryViewController.swift in Sources */,
-				F5A1718E2013236400440783 /* ViewController.swift in Sources */,
+				F59F47BF2016AB6B004D19D3 /* MemoryGalleryViewController.swift in Sources */,
+				F59FCE6620168D3F0052BA27 /* LeftDrawerTableViewController.swift in Sources */,
+				F59FCE6B20168F650052BA27 /* InstagramGalleryViewController.swift in Sources */,
 				F56188982013B43100F856C2 /* PensieveModel.swift in Sources */,
+				F59FCE6F20168F9C0052BA27 /* PersonalGalleryViewController.swift in Sources */,
 				F5A1718A2013236400440783 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,7 +417,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.AdamsApps.Pensieve-AR";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -406,7 +434,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.AdamsApps.Pensieve-AR";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

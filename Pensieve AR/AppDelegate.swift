@@ -8,16 +8,28 @@
 
 import UIKit
 import Firebase
+import KGFloatingDrawer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    let kKGDrawersStoryboardName = "Main"
+    
+    let kMainPensieveViewControllerStoryboardId = "MainPensieveViewControllerStoryboardId"
+    let kPersonalGalleryViewViewControllerStoryboardId = "PersonalGalleryiewControllerStoryboardId"
+    let kKGLeftDrawerStoryboardId = "KGLeftDrawerViewControllerStoryboardId"
+    let kInstagramViewControllerStoryboardId = "InstagramViewControllerStoryboardId"
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         // IQKeyboardManager.sharedManager().enable = true
+        
+        window?.rootViewController = drawerViewController
+        
+        window?.makeKeyAndVisible()
         
         return true
     }
@@ -44,6 +56,108 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    private var _drawerViewController: KGDrawerViewController?
+    var drawerViewController: KGDrawerViewController {
+        get {
+            print(1)
+            if let viewController = _drawerViewController {
+                print(2)
+                return viewController
+            }
+            return prepareDrawerViewController()
+        }
+    }
+    
+    func prepareDrawerViewController() -> KGDrawerViewController {
+        let drawerViewController = KGDrawerViewController()
+        print(3)
+        drawerViewController.centerViewController = mainPensieveViewController()
+        print(4)
+        drawerViewController.leftViewController = leftViewController()
+        print(5)
+        //drawerViewController.rightViewController = rightViewController()
+        drawerViewController.backgroundImage = UIImage(named: "sky3")
+        print(6)
+        
+        _drawerViewController = drawerViewController
+        print(7)
+        
+        return drawerViewController
+    }
+    
+    private func drawerStoryboard() -> UIStoryboard {
+        let storyboard = UIStoryboard(name: kKGDrawersStoryboardName, bundle: nil)
+        return storyboard
+    }
+    
+    private func viewControllerForStoryboardId(storyboardId: String) -> UIViewController {
+        print(500)
+        let viewController: UIViewController = drawerStoryboard().instantiateViewController(withIdentifier: storyboardId)
+        print(501)
+        return viewController
+    }
+    
+    func mainPensieveViewController() -> UIViewController {
+        print(10)
+        let viewController = viewControllerForStoryboardId(storyboardId: kMainPensieveViewControllerStoryboardId)
+        print(11)
+        return viewController
+    }
+    
+    func instagramViewController() -> UIViewController {
+        let viewController = viewControllerForStoryboardId(storyboardId: kInstagramViewControllerStoryboardId)
+        return viewController
+    }
+    
+    func personalGalleryViewController() -> UIViewController {
+        let viewController = viewControllerForStoryboardId(storyboardId:  kPersonalGalleryViewViewControllerStoryboardId)
+        return viewController
+    }
+    
+    private func leftViewController() -> UIViewController {
+        let viewController = viewControllerForStoryboardId(storyboardId: kKGLeftDrawerStoryboardId)
+        return viewController
+    }
+    
+    /*
+     private func rightViewController() -> UIViewController {
+        let viewController = viewControllerForStoryboardId(storyboardId: kKGRightDrawerStoryboardId)
+        return viewController
+    }
+     */
+    
+    func toggleLeftDrawer(sender:AnyObject, animated:Bool) {
+        print("toggle left app delegate")
+        _drawerViewController?.toggleDrawer(.left, animated: true, complete: { (finished) -> Void in
+            // do nothing
+            print("toggle left app delegate done")
+        })
+    }
+    
+    func toggleRightDrawer(sender:AnyObject, animated:Bool) {
+        _drawerViewController?.toggleDrawer(.right, animated: true, complete: { (finished) -> Void in
+            // do nothing
+        })
+    }
+    
+    private var _centerViewController: UIViewController?
+    var centerViewController: UIViewController {
+        get {
+            if let viewController = _centerViewController {
+                return viewController
+            }
+            return mainPensieveViewController()
+        }
+        set {
+            if let drawerViewController = _drawerViewController {
+                drawerViewController.closeDrawer(drawerViewController.currentlyOpenedSide, animated: true) { finished in }
+                if drawerViewController.centerViewController != newValue {
+                    drawerViewController.centerViewController = newValue
+                }
+            }
+            _centerViewController = newValue
+        }
+    }
 
 }
 
