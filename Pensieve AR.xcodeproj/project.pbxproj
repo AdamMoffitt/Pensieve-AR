@@ -10,6 +10,7 @@
 		98D6820BFDD00FA0119C6548 /* Pods_Pensieve_AR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B32C1678D0F17188581DF64 /* Pods_Pensieve_AR.framework */; };
 		F56188962013B10500F856C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F56188952013B10500F856C2 /* GoogleService-Info.plist */; };
 		F56188982013B43100F856C2 /* PensieveModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56188972013B43100F856C2 /* PensieveModel.swift */; };
+		F56AA00C2019BAB500FE0499 /* InstagramSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56AA00B2019BAB500FE0499 /* InstagramSearchViewController.swift */; };
 		F59F47BF2016AB6B004D19D3 /* MemoryGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59F47BE2016AB6B004D19D3 /* MemoryGalleryViewController.swift */; };
 		F59FCE6620168D3F0052BA27 /* LeftDrawerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59FCE6520168D3F0052BA27 /* LeftDrawerTableViewController.swift */; };
 		F59FCE6B20168F650052BA27 /* InstagramGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59FCE6A20168F650052BA27 /* InstagramGalleryViewController.swift */; };
@@ -29,6 +30,7 @@
 		E1457DDFB536E2E1C1E00EF6 /* Pods-Pensieve AR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pensieve AR.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pensieve AR/Pods-Pensieve AR.release.xcconfig"; sourceTree = "<group>"; };
 		F56188952013B10500F856C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F56188972013B43100F856C2 /* PensieveModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PensieveModel.swift; sourceTree = "<group>"; };
+		F56AA00B2019BAB500FE0499 /* InstagramSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstagramSearchViewController.swift; sourceTree = "<group>"; };
 		F59F47BE2016AB6B004D19D3 /* MemoryGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryGalleryViewController.swift; sourceTree = "<group>"; };
 		F59FCE6520168D3F0052BA27 /* LeftDrawerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftDrawerTableViewController.swift; sourceTree = "<group>"; };
 		F59FCE6A20168F650052BA27 /* InstagramGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstagramGalleryViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				F59FCE6A20168F650052BA27 /* InstagramGalleryViewController.swift */,
 				F5A1719D2013328C00440783 /* AddMemoryViewController.swift */,
 				F59FCE6E20168F9C0052BA27 /* PersonalGalleryViewController.swift */,
+				F56AA00B2019BAB500FE0499 /* InstagramSearchViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/KGFloatingDrawer/KGFloatingDrawer.framework",
+				"${BUILT_PRODUCTS_DIR}/YNSearch/YNSearch.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -219,6 +223,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KGFloatingDrawer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YNSearch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -268,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5A1719E2013328C00440783 /* AddMemoryViewController.swift in Sources */,
+				F56AA00C2019BAB500FE0499 /* InstagramSearchViewController.swift in Sources */,
 				F59F47BF2016AB6B004D19D3 /* MemoryGalleryViewController.swift in Sources */,
 				F59FCE6620168D3F0052BA27 /* LeftDrawerTableViewController.swift in Sources */,
 				F59FCE6B20168F650052BA27 /* InstagramGalleryViewController.swift in Sources */,

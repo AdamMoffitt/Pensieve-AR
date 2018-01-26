@@ -91,8 +91,8 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
         SharedPensieveModel = PensieveModel.shared
         
         // Get Instagram images
-        //pullYourCrapDown(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
-        getProfileImages()
+        pullYourCrapDown(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
+        // getProfileImages()
         getInstagramMemories(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
         
         
@@ -123,7 +123,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
     
     @IBAction func menuButtonPressed(_ sender: Any) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        print("toggle left 2")
         appDelegate.toggleLeftDrawer(sender: sender as AnyObject, animated: true)
     }
     
@@ -499,8 +498,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
         }
         
         task.resume()
-        
-        
     }
     
     @objc func playerItemDidReachEnd(notification: NSNotification) {
@@ -525,9 +522,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                             let url = item["src"] as! String
                             let isVideo = item["is_video"] as! Bool
                             let caption = item["caption"] as! String
-                            print(url)
-                            print(isVideo)
-                            print(caption)
                             if(url != nil) {
                                 if let data = try? Data(contentsOf: URL(string: url)!) {
                                     if (data != nil) {
@@ -544,7 +538,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                                             let videoURL = URL(string: url)
                                             let player = AVPlayer(url: videoURL!)
                                             
-                                            print(700)
                                             // To make the video loop
                                             player.actionAtItemEnd = .none
                                             NotificationCenter.default.addObserver(
@@ -553,7 +546,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                                                 name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                                                 object: player.currentItem)
                                             
-                                            print(800)
                                             let videoNode = SKVideoNode(avPlayer: player)
                                             let size = CGSize(width: 1024, height: 512)
                                             videoNode.size = size

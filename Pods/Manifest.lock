@@ -40,6 +40,7 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - YNSearch (2.3.1)
 
 DEPENDENCIES:
   - ARCL
@@ -49,6 +50,7 @@ DEPENDENCIES:
   - GeoFire (from `https://github.com/firebase/geofire-objc.git`)
   - IQKeyboardManagerSwift
   - KGFloatingDrawer
+  - YNSearch (~> 2.3)
 
 EXTERNAL SOURCES:
   GeoFire:
@@ -74,7 +76,8 @@ SPEC CHECKSUMS:
   KGFloatingDrawer: b0c2810954bfb61f4d4dd01b8891d5c23933e368
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  YNSearch: 3a6e0a69cfd34a7c5a7c77e0873f426de4437824
 
-PODFILE CHECKSUM: b9a2cfb38ffcf1e793d1e8f911fd7bfbfb8afbb0
+PODFILE CHECKSUM: 741e534d9df3090c4c7153d22a60cda3711d272d
 
 COCOAPODS: 1.3.1

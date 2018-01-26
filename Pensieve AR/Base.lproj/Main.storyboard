@@ -28,8 +28,15 @@
                         <viewLayoutGuide key="safeArea" id="Rct-4S-f3A"/>
                     </view>
                     <navigationItem key="navigationItem" title="Personal Gallery" id="EbM-jj-tUD">
-                        <barButtonItem key="leftBarButtonItem" image="menu" id="5Ur-4O-zUO"/>
+                        <barButtonItem key="leftBarButtonItem" image="menu" id="5Ur-4O-zUO">
+                            <connections>
+                                <action selector="LeftDrawerButtonPressed:" destination="4wN-7J-21N" id="BlY-xf-WxI"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="sceneView" destination="ESJ-bI-QXk" id="bcp-rx-QnO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tIA-GF-n8J" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -143,18 +150,59 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </sceneKitView>
+                            <searchBar contentMode="redraw" fixedFrame="YES" placeholder="Enter username to search..." translatesAutoresizingMaskIntoConstraints="NO" id="w9R-Vn-dfo">
+                                <rect key="frame" x="0.0" y="611" width="375" height="56"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="nqS-AE-bzQ"/>
                     </view>
                     <navigationItem key="navigationItem" title="Instagram Gallery" id="IsH-H9-oG6">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="menu" id="QrN-yC-sfn"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="QNH-dj-Wbb"/>
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="menu" id="QrN-yC-sfn">
+                            <connections>
+                                <action selector="leftDrawerButtonPressed:" destination="qg8-ka-6Cm" id="uaf-wJ-ph6"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="QNH-dj-Wbb">
+                            <connections>
+                                <action selector="searchBarButtonPressed:" destination="qg8-ka-6Cm" id="Gy2-3s-jBr"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="sceneView" destination="e4g-5u-9zO" id="iQK-QL-hBf"/>
+                        <outlet property="searchDisplayController" destination="j1a-uy-ihP" id="V5b-FF-Kkh"/>
+                        <outlet property="usernameSearchBar" destination="w9R-Vn-dfo" id="7sO-V0-aOC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R80-HH-eGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="j1a-uy-ihP">
+                    <connections>
+                        <outlet property="delegate" destination="qg8-ka-6Cm" id="3qx-k0-OOC"/>
+                        <outlet property="searchContentsController" destination="qg8-ka-6Cm" id="1MZ-kd-EZJ"/>
+                        <outlet property="searchResultsDataSource" destination="qg8-ka-6Cm" id="Gq3-Ex-agB"/>
+                        <outlet property="searchResultsDelegate" destination="qg8-ka-6Cm" id="K98-xF-Kk9"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1368.8" y="731.78410794602701"/>
+        </scene>
+        <!--Instagram Search View Controller-->
+        <scene sceneID="wb2-hB-OTR">
+            <objects>
+                <viewController id="4Lj-Ld-Y1u" customClass="InstagramSearchViewController" customModule="Pensieve_AR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8Gh-GR-CrQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="B7k-5t-Uph"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5ZG-nB-U6b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2215" y="732"/>
         </scene>
         <!--Add Memory View Controller-->
         <scene sceneID="xcs-ey-Ub5">
@@ -279,10 +327,10 @@
             </objects>
             <point key="canvasLocation" x="2036" y="31.934032983508249"/>
         </scene>
-        <!--Left Drawer Table View Controller-->
+        <!--Left Drawer View Controller-->
         <scene sceneID="D7c-Vn-XH2">
             <objects>
-                <tableViewController storyboardIdentifier="KGLeftDrawerViewControllerStoryboardId" id="51A-FR-BM9" customClass="LeftDrawerTableViewController" customModule="Pensieve_AR" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="KGLeftDrawerViewControllerStoryboardId" id="51A-FR-BM9" customClass="LeftDrawerViewController" customModule="Pensieve_AR" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" delaysContentTouches="NO" canCancelContentTouches="NO" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="6tO-sX-qze">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -290,7 +338,7 @@
                         <sections>
                             <tableViewSection id="U5M-Jr-cUU">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="DCV-JU-yh2">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="DCV-JU-yh2">
                                         <rect key="frame" x="0.0" y="35" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DCV-JU-yh2" id="dNg-CJ-52X">
@@ -299,7 +347,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="q5e-I1-Kyc">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="q5e-I1-Kyc">
                                         <rect key="frame" x="0.0" y="79" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="q5e-I1-Kyc" id="If7-O9-GKf">
