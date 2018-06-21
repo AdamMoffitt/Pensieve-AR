@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "981D57601F901388909B00C6D914BC98"
+               BlueprintIdentifier = "F8A035F1032A24F3B14DCF4C462DF30D"
                BuildableName = "Pods_Pensieve_AR.framework"
                BlueprintName = "Pods-Pensieve AR"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "981D57601F901388909B00C6D914BC98"
+            BlueprintIdentifier = "F8A035F1032A24F3B14DCF4C462DF30D"
             BuildableName = "Pods_Pensieve_AR.framework"
             BlueprintName = "Pods-Pensieve AR"
             ReferencedContainer = "container:Pods.xcodeproj">

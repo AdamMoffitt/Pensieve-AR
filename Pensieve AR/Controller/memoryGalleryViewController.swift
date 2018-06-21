@@ -416,9 +416,7 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
         print("pull instagram down")
         let lat = String(latitude)
         let long = String(longitude)
-        // let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instaImages?latitude=\(lat)&longitude=\(long)")
         let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instagramLocationScraper?latitude=\(lat)&longitude=\(long)")
-        print(url ?? " ")
         
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             
@@ -432,8 +430,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                             let url = item["src"] as! String
                             let isVideo = item["is_video"] as! Bool
                             let caption = item["caption"] as! String
-                            print(url)
-                            print(isVideo)
                             print(caption)
                             if(url != nil) {
                                 if let data = try? Data(contentsOf: URL(string: url)!) {
@@ -451,7 +447,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                                             let videoURL = URL(string: url)
                                             let player = AVPlayer(url: videoURL!)
                                             
-                                            print(700)
                                             // To make the video loop
                                             player.actionAtItemEnd = .none
                                             NotificationCenter.default.addObserver(
@@ -460,7 +455,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                                                 name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
                                                 object: player.currentItem)
                                             
-                                            print(800)
                                             let videoNode = SKVideoNode(avPlayer: player)
                                             let size = CGSize(width: 1024, height: 512)
                                             videoNode.size = size
@@ -468,7 +462,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                                             videoNode.yScale = -1.0
                                             let spriteScene = SKScene(size: size)
                                             videoNode.play()
-                                            
                                             spriteScene.addChild(videoNode)
                                             node.geometry?.firstMaterial?.diffuse.contents = spriteScene
                                         } else {

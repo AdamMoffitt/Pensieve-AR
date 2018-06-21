@@ -35,6 +35,13 @@ PODS:
   - IQKeyboardManagerSwift (5.0.7)
   - KGFloatingDrawer (0.2.0)
   - leveldb-library (1.20)
+  - Material (2.13.5):
+    - Material/Core (= 2.13.5)
+  - Material/Core (2.13.5):
+    - Motion (~> 1.3.0)
+  - Motion (1.3.4):
+    - Motion/Core (= 1.3.4)
+  - Motion/Core (1.3.4)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
     - nanopb/encode (= 0.3.8)
@@ -50,6 +57,7 @@ DEPENDENCIES:
   - GeoFire (from `https://github.com/firebase/geofire-objc.git`)
   - IQKeyboardManagerSwift
   - KGFloatingDrawer
+  - Material
   - YNSearch (~> 2.3)
 
 EXTERNAL SOURCES:
@@ -75,9 +83,11 @@ SPEC CHECKSUMS:
   IQKeyboardManagerSwift: 30fb3a61de1af53a95e02b80fb54ed0a19d5ede5
   KGFloatingDrawer: b0c2810954bfb61f4d4dd01b8891d5c23933e368
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
+  Material: ced3fd11882147b135f897ca20227174bb104ad0
+  Motion: 85b8777db2e68801c03a5c629e918c35dd184c8d
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   YNSearch: 3a6e0a69cfd34a7c5a7c77e0873f426de4437824
 
-PODFILE CHECKSUM: 741e534d9df3090c4c7153d22a60cda3711d272d
+PODFILE CHECKSUM: eb353258e4b41327c458adb7bde5bcb0bbc633d4
 
 COCOAPODS: 1.3.1

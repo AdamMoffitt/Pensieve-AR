@@ -70,17 +70,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func prepareDrawerViewController() -> KGDrawerViewController {
         let drawerViewController = KGDrawerViewController()
-        print(3)
         drawerViewController.centerViewController = mainPensieveViewController()
-        print(4)
         drawerViewController.leftViewController = leftViewController()
-        print(5)
         //drawerViewController.rightViewController = rightViewController()
         drawerViewController.backgroundImage = UIImage(named: "sky3")
-        print(6)
         
         _drawerViewController = drawerViewController
-        print(7)
         
         return drawerViewController
     }

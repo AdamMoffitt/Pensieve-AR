@@ -37,8 +37,9 @@ open class YNSearchListView: UITableView, UITableViewDelegate, UITableViewDataSo
     open func initData(database: [Any]) {
         self.database = database
         self.searchResultDatabase = database
-        self.reloadData()
-
+        DispatchQueue.main.async {
+            self.reloadData()
+        }
     }
     
     required public init?(coder aDecoder: NSCoder) {

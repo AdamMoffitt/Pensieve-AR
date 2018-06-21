@@ -9,32 +9,10 @@
 import UIKit
 import YNSearch
 
-class YNDropDownMenu: YNSearchModel {
-    var starCount = 512
-    var description = "Awesome Dropdown menu for iOS with Swift 3"
-    var version = "2.3.0"
-    var url = "https://github.com/younatics/YNDropDownMenu"
-}
-
-class YNSearchData: YNSearchModel {
-    var title = "YNSearch"
-    var starCount = 271
-    var description = "Awesome fully customize search view like Pinterest written in Swift 3"
-    var version = "0.3.1"
-    var url = "https://github.com/younatics/YNSearch"
-}
-
-class YNExpandableCell: YNSearchModel {
-    var title = "YNExpandableCell"
-    var starCount = 191
-    var description = "Awesome expandable, collapsible tableview cell for iOS written in Swift 3"
-    var version = "1.1.0"
-    var url = "https://github.com/younatics/YNExpandableCell"
-}
-
 class InstagramSearchViewController: YNSearchViewController, YNSearchDelegate {
 
     var username : String = ""
+    var ynSearch = YNSearch()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,9 +27,9 @@ class InstagramSearchViewController: YNSearchViewController, YNSearchDelegate {
         self.delegate = self
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
-        let database1 = YNDropDownMenu(key: "YNDropDownMenu")
-        let database2 = YNSearchData(key: "YNSearchData")
-        let database3 = YNExpandableCell(key: "YNExpandableCell")
+        let database1 = "testuser"
+        let database2 = "danthemanlinderman"
+        let database3 = "admoffitt15"
         let demoDatabase = [database1, database2, database3]
         
         self.initData(database: demoDatabase)
@@ -104,18 +82,20 @@ class InstagramSearchViewController: YNSearchViewController, YNSearchDelegate {
     
     func ynSearchListView(_ ynSearchListView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.ynSearchView.ynSearchListView.dequeueReusableCell(withIdentifier: YNSearchListViewCell.ID) as! YNSearchListViewCell
-        if let ynmodel = self.ynSearchView.ynSearchListView.searchResultDatabase[indexPath.row] as? YNSearchModel {
-            cell.searchLabel.text = ynmodel.key
+        if let ynmodel = self.ynSearchView.ynSearchListView.searchResultDatabase[indexPath.row] as? String {
+            cell.searchLabel.text = ynmodel
         }
         
         return cell
     }
     
     func ynSearchListView(_ ynSearchListView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let ynmodel = self.ynSearchView.ynSearchListView.searchResultDatabase[indexPath.row] as? YNSearchModel, let key = ynmodel.key {
-            self.ynSearchView.ynSearchListView.ynSearchListViewDelegate?.ynSearchListViewClicked(key: key)
+        if let selectedUsername = self.ynSearchView.ynSearchListView.searchResultDatabase[indexPath.row] as? String {
+            self.ynSearchView.ynSearchListView.ynSearchListViewDelegate?.ynSearchListViewClicked(key: selectedUsername)
             self.ynSearchView.ynSearchListView.ynSearchListViewDelegate?.ynSearchListViewClicked(object: self.ynSearchView.ynSearchListView.database[indexPath.row])
-            self.ynSearchView.ynSearchListView.ynSearch.appendSearchHistories(value: key)
+            self.ynSearchView.ynSearchListView.ynSearch.appendSearchHistories(value: selectedUsername)
+            self.username = selectedUsername
+            self.performSegue(withIdentifier: "usernameChosenSegue", sender: self)
         }
     }
     
@@ -129,13 +109,64 @@ class InstagramSearchViewController: YNSearchViewController, YNSearchDelegate {
     }
 
     func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+        print("prepare for segue")
         if(segue.identifier == "usernameChosenSegue") {
-            
-            let nextViewController = (segue.destination as! InstagramGalleryViewController)
-            // nextViewController.username = self.username
-            if (username != "") { nextViewController.getInstagramMemoriesFromUsername(username: self.username)
+            print("usernameChosenSegue")
+            if let nextViewController = segue.destination as? InstagramGalleryViewController {
+                print("is igvc")
+                // nextViewController.username = self.username
+                if (self.username != "") {
+                    print("send username")
+                    nextViewController.getInstagramMemoriesFromUsername(username: self.username)
+                }
             }
         }
+    }
+    
+    func getAutocompleteSuggestions(username: String) {
+        let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instagramHandleScraper?handle=\(username)&n=5")
+        
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            
+            if let data = data {
+                do {
+                    // Convert the data to JSON
+                    let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]]
+                    var usernames : [String] = []
+                    if let json = jsonSerialized {
+                        for item in json {
+                            print(item)
+                            let user = item["user"] as! NSDictionary
+                            let url = user["profile_pic_url"] as! String
+                            let isPrivate = user["is_private"] as! Bool
+                            let handle = user["username"] as! String
+                            usernames.append(handle)
+                            print(handle)
+                            if(url != nil) {
+                                if let data = try? Data(contentsOf: URL(string: url)!) {
+                                    if (data != nil) {
+                                        print("data blah")
+                                    }
+                                }
+                            }
+                        }
+                        //self.ynSearch.setSearchHistories(value: usernames)
+                        self.initData(database: usernames)
+                        print(usernames)
+                    }
+                }  catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    override func ynSearchTextfieldTextChanged(_ textField: UITextField) {
+        print("changed textfield")
+        getAutocompleteSuggestions(username: textField.text!)
     }
 }

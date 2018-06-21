@@ -165,11 +165,18 @@
                                 <action selector="leftDrawerButtonPressed:" destination="qg8-ka-6Cm" id="uaf-wJ-ph6"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="QNH-dj-Wbb">
-                            <connections>
-                                <action selector="searchBarButtonPressed:" destination="qg8-ka-6Cm" id="Gy2-3s-jBr"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="search" id="QNH-dj-Wbb">
+                                <connections>
+                                    <action selector="searchBarButtonPressed:" destination="qg8-ka-6Cm" id="Gy2-3s-jBr"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Temp" id="ghi-6X-XRq">
+                                <connections>
+                                    <segue destination="4Lj-Ld-Y1u" kind="show" id="f90-df-8dy"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="sceneView" destination="e4g-5u-9zO" id="iQK-QL-hBf"/>

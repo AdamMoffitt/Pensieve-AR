@@ -14,4 +14,5 @@ target 'Pensieve AR' do
     pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
 	pod 'KGFloatingDrawer'
 	pod 'YNSearch', '~> 2.3'
+	pod 'Material'
 end
