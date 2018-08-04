@@ -74,6 +74,8 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
             locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
             locationManager.distanceFilter = 15
             locationManager.startUpdatingLocation()
+            
+            
         }
         
         notificationCenter.delegate = self
@@ -83,18 +85,16 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
             }
         }
         
+        if (CLLocationManager.locationServicesEnabled()) {
+            pullImages()
+        }
+        
         self.navigationController?.navigationBar.alpha = 0.5
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.view.backgroundColor = .clear
         self.navigationController?.title = "Pensieve AR"
         
         SharedPensieveModel = PensieveModel.shared
-        
-        // Get Instagram images
-        pullYourCrapDown(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
-        // getProfileImages()
-        getInstagramMemories(latitude: (locationManager.location?.coordinate.latitude)!, longitude: (locationManager.location?.coordinate.longitude)!)
-        
         
         /*
          setImage(image: UIImage(named: "Add")!, latitude: 35.6337652, longitude: -119.7095671)
@@ -318,6 +318,8 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if(status == CLAuthorizationStatus.denied) {
             showLocationDisabledPopUp()
+        } else {
+            pullImages()
         }
     }
     
@@ -626,6 +628,22 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
         }
         
         task.resume()
+    }
+    
+    func pullImages() {
+        
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined, .restricted, .denied:
+                print("No access")
+            case .authorizedAlways, .authorizedWhenInUse:
+                self.pullYourCrapDown(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)
+                // getProfileImages()
+                self.getInstagramMemories(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)
+            }
+        } else {
+            print("Location services are not enabled")
+        }
     }
 }
 

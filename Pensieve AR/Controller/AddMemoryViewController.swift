@@ -145,20 +145,20 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
             // post image
             if let uploadData = UIImageJPEGRepresentation(image!, 0.1) {
                 let tempImageName = NSUUID().uuidString
-                SharedPensieveModel.storageRef.child("images").child("\(tempImageName).png").putData(uploadData, metadata: nil, completion: { (metadata, error) in
-                    if error != nil {
+                let photoRef = SharedPensieveModel.storageRef.child("images").child("\(tempImageName).png")
+                    photoRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                    if error != nil || metadata == nil {
                         print (error ?? "Error")
                         return
                     }
                     //save the firebase image url in order to download the image later
-                    let tempSavedImageURL = ""
-                        
-                    metadata!.storageReference!.downloadURL(completion : {
-                        (string, error) in
-                        
-                        print("BLAH BLAH BLAH" + string!.absoluteString)
-                        
-                    self.SharedPensieveModel.ref.child("memories").child(memoryID).child("imageURL").setValue(string!.absoluteString)
+                    photoRef.downloadURL(completion : {
+                        (url, error) in
+                        guard let downloadUrl = url else {
+                            return
+                        }
+                        print("BLAH BLAH BLAH" + url!.absoluteString)
+                        self.SharedPensieveModel.ref.child("memories").child(memoryID).child("imageURL").setValue(url!.absoluteString)
 //                        print("write temp saved url: \(memoryID)")
                         self.navigationController?.popViewController(animated: true)
                         
