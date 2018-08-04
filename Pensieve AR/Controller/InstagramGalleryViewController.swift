@@ -319,7 +319,9 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
                 } else if let error = error {
                     print(error.localizedDescription)
                 }
-                self.make180Gallery(radius: 5, numRows: 2, media: self.mediaForViews)
+                if !self.mediaForViews.isEmpty {
+                    self.make180Gallery(radius: 5, numRows: 2, media: self.mediaForViews)
+                }
             }
             
             task.resume()
@@ -390,6 +392,7 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let username = searchBar.text
+        self.dismissKeyboard()
         getInstagramMemoriesFromUsername(username: username!)
     }
 }
