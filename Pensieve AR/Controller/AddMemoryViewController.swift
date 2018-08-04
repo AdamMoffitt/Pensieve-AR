@@ -151,11 +151,20 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
                         return
                     }
                     //save the firebase image url in order to download the image later
-                    let tempSavedImageURL = (metadata?.downloadURL()?.absoluteString)!
-                    print("temp saved url: \(tempSavedImageURL)")
-                    self.SharedPensieveModel.ref.child("memories").child(memoryID).child("imageURL").setValue(tempSavedImageURL)
-                    print("write temp saved url: \(memoryID)")
+                    let tempSavedImageURL = ""
+                        
+                    metadata!.storageReference!.downloadURL(completion : {
+                        (string, error) in
+                        
+                        print("BLAH BLAH BLAH" + string!.absoluteString)
+                        
+                    self.SharedPensieveModel.ref.child("memories").child(memoryID).child("imageURL").setValue(string!.absoluteString)
+//                        print("write temp saved url: \(memoryID)")
                         self.navigationController?.popViewController(animated: true)
+                        
+                    })
+//                    print("temp saved url: \(tempSavedImageURL)")
+                    
                     /*
                      // Success alert
                      let alert = SCLAlertView()
@@ -184,7 +193,7 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
         if let location = self.locationManager.location {
             //print(location.coordinate)
             let geoFire = GeoFire(firebaseRef: self.SharedPensieveModel.ref.child("memories"))
-            geoFire?.setLocation(CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude), forKey: memoryID)
+            geoFire.setLocation(CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude), forKey: memoryID)
             print("write geofire location: \(memoryID)")
         } else {
             print("whoops")

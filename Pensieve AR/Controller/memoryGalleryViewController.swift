@@ -154,9 +154,9 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
     
     @IBAction func refreshButtonPressed(_ sender: Any) {
         let currentLocation = locationManager.location
-        let geoFire = GeoFire(firebaseRef: SharedPensieveModel?.ref.child("memories"))
-        var circleQuery = geoFire?.query(at: currentLocation, withRadius: 0.02)
-        var queryHandle = circleQuery?.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
+        let geoFire = GeoFire(firebaseRef: SharedPensieveModel!.ref!.child("memories"))
+        var circleQuery = geoFire.query(at: currentLocation!, withRadius: 0.02)
+        var queryHandle = circleQuery.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
             print("Key '\(key!)' entered the search area and is at location '\(location!)'")
             
             let tempRef = self.SharedPensieveModel?.ref.child("memories").child(key)
