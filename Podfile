@@ -12,7 +12,7 @@ target 'Pensieve AR' do
 	pod 'Firebase/Database'
     pod 'IQKeyboardManagerSwift'
     pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
-	pod 'YNSearch', '~> 2.3'
+	pod 'YNSearch'
 	pod 'Material'
     pod 'IQKeyboardManagerSwift'
 end
