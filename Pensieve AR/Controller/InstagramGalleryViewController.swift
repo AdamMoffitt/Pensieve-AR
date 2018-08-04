@@ -258,6 +258,7 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
                             self.sceneView.scene.rootNode.enumerateChildNodes { (node, stop) -> Void in
                                 node.removeFromParentNode()
                             }
+                            print(json)
                             for item in json {
                                 let url = item["src"] as! String
                                 let isVideo = item["is_video"] as! Bool
@@ -392,6 +393,7 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let username = searchBar.text
+        print("search instagram username: \(username!)")
         self.dismissKeyboard()
         getInstagramMemoriesFromUsername(username: username!)
     }

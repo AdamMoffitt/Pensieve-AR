@@ -74,8 +74,7 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
             locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
             locationManager.distanceFilter = 15
             locationManager.startUpdatingLocation()
-            
-            
+            // pull images when location manager didChangeAuthorization returns that user allows location permissions
         }
         
         notificationCenter.delegate = self
@@ -83,10 +82,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
             if granted {
                 print("NotificationCenter Authorization Granted!")
             }
-        }
-        
-        if (CLLocationManager.locationServicesEnabled()) {
-            pullImages()
         }
         
         self.navigationController?.navigationBar.alpha = 0.5
@@ -639,9 +634,11 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
             case .notDetermined, .restricted, .denied:
                 print("No access")
             case .authorizedAlways, .authorizedWhenInUse:
-                self.pullYourCrapDown(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)
-                // getProfileImages()
-                self.getInstagramMemories(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)
+                if let latitude = self.locationManager.location?.coordinate.latitude, let longitude = self.locationManager.location?.coordinate.latitude {
+                    self.pullYourCrapDown(latitude: latitude, longitude: longitude)
+                    // getProfileImages()
+                    self.getInstagramMemories(latitude: latitude, longitude: longitude)
+                }
             }
         } else {
             print("Location services are not enabled")
