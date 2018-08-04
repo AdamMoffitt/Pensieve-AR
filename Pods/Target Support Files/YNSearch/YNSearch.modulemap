@@ -1,6 +1,0 @@
-framework module YNSearch {
-  umbrella header "YNSearch-umbrella.h"
-
-  export *
-  module * { export * }
-}
