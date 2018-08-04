@@ -598,22 +598,24 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                         for imageUrl in json {
                             print(imageUrl)
                             if(imageUrl != nil) {
-                                if let data = try? Data(contentsOf: URL(string: imageUrl)!) {
-                                    if (data != nil) {
-                                        let image = UIImage(data: data)
-                                        image?.resize(toTargetSize: CGSize(width: 640, height: 640))
-                                        let node = SCNNode()
-                                        node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
-                                        let targetNode = SCNNode()
-                                        let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
-                                        targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
-                                        let lookat = SCNLookAtConstraint(target: targetNode)
-                                        node.constraints = [lookat]
-                                        node.geometry?.firstMaterial?.diffuse.contents = image
-                                        node.position = SCNVector3(CGFloat( 5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
-                                                                   CGFloat(y_val),
-                                                                   CGFloat(5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX))))
-                                        self.sceneView.scene.rootNode.addChildNode(node)
+                                if let url = URL(string: imageUrl) {
+                                    if let data = try? Data(contentsOf: url) {
+                                        if (data != nil) {
+                                            let image = UIImage(data: data)
+                                            image?.resize(toTargetSize: CGSize(width: 640, height: 640))
+                                            let node = SCNNode()
+                                            node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
+                                            let targetNode = SCNNode()
+                                            let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
+                                            targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
+                                            let lookat = SCNLookAtConstraint(target: targetNode)
+                                            node.constraints = [lookat]
+                                            node.geometry?.firstMaterial?.diffuse.contents = image
+                                            node.position = SCNVector3(CGFloat( 5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                                                       CGFloat(y_val),
+                                                                       CGFloat(5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                            self.sceneView.scene.rootNode.addChildNode(node)
+                                        }
                                     }
                                 }
                             }
