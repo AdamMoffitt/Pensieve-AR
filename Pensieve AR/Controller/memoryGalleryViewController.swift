@@ -166,7 +166,7 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                         if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
                             if (data != nil) {
                                 var image = UIImage(data: data)
-                                image?.resize(toTargetSize: CGSize(width: 640, height: 640))
+                                image = image?.resize(toTargetSize: CGSize(width: 640, height: 640))
                                 //self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                                 image = self.orientImage(image: image!)
                                 //print("IMAGE ORIENTATION: \((image?.imageOrientation)!.rawValue)")
