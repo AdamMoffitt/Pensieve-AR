@@ -15,6 +15,7 @@ class PensieveModel {
     var storage : Storage
     var storageRef : StorageReference
     var ref: DatabaseReference!
+    var instagramUsername: String?
     
     //singleton
     static var shared = PensieveModel()
@@ -56,4 +57,6 @@ class PensieveModel {
         string1 = string1.replacingOccurrences(of: "_S", with: "/")
         return string1
     }
+    
+    // TODO MOVE INSTAGRAM CALLS INTO THE MODEL SO AS NOT TO REPLICATE CALLS
 }

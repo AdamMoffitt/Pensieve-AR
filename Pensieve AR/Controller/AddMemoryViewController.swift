@@ -154,7 +154,7 @@ class AddMemoryViewController: UIViewController, UIImagePickerControllerDelegate
                     //save the firebase image url in order to download the image later
                     photoRef.downloadURL(completion : {
                         (url, error) in
-                        guard let downloadUrl = url else {
+                        guard url != nil else {
                             return
                         }
                         print("BLAH BLAH BLAH" + url!.absoluteString)

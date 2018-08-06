@@ -180,7 +180,7 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
                             let url = item["src"] as! String
                             let isVideo = item["is_video"] as! Bool
                             let caption = item["caption"] as! String
-                            print(caption)
+                            print("Caption: \(caption)")
                             if(url != nil) {
                                 if let data = try? Data(contentsOf: URL(string: url)!) {
                                     if (data != nil) {
