@@ -97,46 +97,59 @@ function scrapeInstagramLocation(locationID = "212956468", n = 10) {
 function scrapeInstagramProfile(profile="ucsantabarbara", n = 10) {
     var api = `https://www.instagram.com/${profile}`;
     return new Promise((resolve, reject) => {
-	fetchRequest(api).then((html) => {
-	    var raw_json = html.split("window._sharedData = ")[1].split(";</script>")[0];
-	    var json = JSON.parse(raw_json);
-	    var user = json["entry_data"]["ProfilePage"][0]["user"];
-	    console.log(user);
-	    var posts = user["media"]["nodes"];
-	    
-	    var post_data = [];
-	    
-	    var i = 0;
-	    async.each(posts, (post, callback) => {
-		var new_post = {}
-		
-		new_post["is_video"] = post["is_video"];
-		new_post["caption"] = post["caption"];
-		new_post["likes"] = post["likes"]["count"];
-		new_post["src"] = post["display_src"];
-	    
-		if (new_post["is_video"]) {
-		    var videoID = post["code"];
-		    var video_api = `https://www.instagram.com/p/${videoID}`;
-		    fetchRequest(video_api).then((html) => {
-			var video = html.split("video_url\":")[1].replace("mp4", "mp4,").split(",")[0].replace(' "',"");
-			new_post["src"] = video;
-			post_data.push(new_post);
-			callback();
+		fetchRequest(api).then((html) => {
+		    var raw_json = html.split("window._sharedData = ")[1].split(";</script>")[0];
+		    var json = JSON.parse(raw_json);
+		    var user = json["entry_data"]["ProfilePage"][0]["graphql"]["user"];
+		    // console.log(json["entry_data"]["ProfilePage"][0]["graphql"]["user"]);
+		    // console.log(json);
+		    // console.log(user["edge_owner_to_timeline_media"]);
+		    var posts = user["edge_owner_to_timeline_media"]["edges"];
+		    
+		    var post_data = [];
+		    
+		    var i = 0;
+			async.each(posts, (post, callback) => {
+				var new_post = {}
+				// console.log(post)
+				post = post["node"];
+				console.log(post["edge_media_to_caption"]["edges"][0]["node"]["text"])
+				new_post["is_video"] = post["is_video"];
+				new_post["caption"] = post["edge_media_to_caption"]["edges"][0]["node"]["text"];
+				new_post["likes"] = post["edge_liked_by"]["count"];
+				new_post["src"] = post["thumbnail_src"];
+			    
+				if (new_post["is_video"]) {
+				    var videoID = post["shortcode"];
+				    var video_api = `https://www.instagram.com/p/${videoID}`;
+				    fetchRequest(video_api).then((html) => {
+				    	console.log("************************")
+				    	console.log(video_api)
+				    	var raw_json = html.split("window._sharedData = ")[1].split(";</script>")[0];
+						console.log(raw_json)
+				    	console.log("************************")
+						
+						// var video = html.split("video_url\":")[0].replace("mp4", "mp4,").split(",")[0].replace(' "',"");
+						var json = JSON.parse(raw_json)
+						var video = json["entry_data"]["PostPage"][0]["graphql"]["shortcode_media"]["video_url"]
+						console.log(video);
+						new_post["src"] = video;
+						post_data.push(new_post);
+						callback();
+				    });
+				} else {
+				    post_data.push(new_post);
+				    callback();
+				}
+			    
+			}, (err) => {
+				if (err) {
+				    reject("Error getting img/videos");
+				} else {
+				    resolve(post_data.slice(0, n));
+				}
 		    });
-		} else {
-		    post_data.push(new_post);
-		    callback();
-		}
-	    
-	    }, (err) => {
-		if (err) {
-		    reject("Error getting img/videos");
-		} else {
-		    resolve(post_data.slice(0, n));
-		}
-	    });
-	});
+		});
     });
 }
 
@@ -217,15 +230,15 @@ exports.instagramProfileScraper = functions.https.onRequest((req, res) => {
     var n = 10;
 
     try {
-	profile = req.query.profile;
-	if (req.query.n !== '') {
-	    n = req.query.n;
-	    console.log(n);
-	}
+		profile = req.query.profile;
+		if (req.query.n !== '') {
+		    n = req.query.n;
+		    console.log(n);
+		}
     } catch (err) {
-	console.log("Parameters not passed in properly");
-	res.status(400).send();
-	return;
+		console.log("Parameters not passed in properly");
+		res.status(400).send();
+		return;
     }
     
     if (profile !== null) {
