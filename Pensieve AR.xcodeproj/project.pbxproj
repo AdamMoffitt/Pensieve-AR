@@ -22,6 +22,10 @@
 		F5A171932013236400440783 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5A171922013236400440783 /* Assets.xcassets */; };
 		F5A171962013236400440783 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5A171942013236400440783 /* LaunchScreen.storyboard */; };
 		F5A1719E2013328C00440783 /* AddMemoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5A1719D2013328C00440783 /* AddMemoryViewController.swift */; };
+		F5B8A8BC21165C5A00DF47D4 /* KGDrawerAnimating.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B8A8B721165C5900DF47D4 /* KGDrawerAnimating.swift */; };
+		F5B8A8BD21165C5A00DF47D4 /* KGDrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B8A8B821165C5900DF47D4 /* KGDrawerView.swift */; };
+		F5B8A8BE21165C5A00DF47D4 /* KGDrawerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B8A8B921165C5900DF47D4 /* KGDrawerViewController.swift */; };
+		F5B8A8BF21165C5A00DF47D4 /* KGDrawerSpringAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5B8A8BA21165C5900DF47D4 /* KGDrawerSpringAnimator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +48,11 @@
 		F5A171952013236400440783 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F5A171972013236400440783 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5A1719D2013328C00440783 /* AddMemoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemoryViewController.swift; sourceTree = "<group>"; };
+		F5B8A8B721165C5900DF47D4 /* KGDrawerAnimating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KGDrawerAnimating.swift; sourceTree = "<group>"; };
+		F5B8A8B821165C5900DF47D4 /* KGDrawerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KGDrawerView.swift; sourceTree = "<group>"; };
+		F5B8A8B921165C5900DF47D4 /* KGDrawerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KGDrawerViewController.swift; sourceTree = "<group>"; };
+		F5B8A8BA21165C5900DF47D4 /* KGDrawerSpringAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KGDrawerSpringAnimator.swift; sourceTree = "<group>"; };
+		F5B8A8BB21165C5A00DF47D4 /* KGFloatingDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KGFloatingDrawer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,17 +119,38 @@
 			isa = PBXGroup;
 			children = (
 				F5A171892013236400440783 /* AppDelegate.swift */,
-				F5A1718B2013236400440783 /* art.scnassets */,
 				F59FCE6720168D4E0052BA27 /* Controller */,
+				F5B8A8C121165C7400DF47D4 /* Model */,
+				F5B8A8C021165C5F00DF47D4 /* KGFloatingDrawer */,
+				F5A1718B2013236400440783 /* art.scnassets */,
 				F5A1718F2013236400440783 /* Main.storyboard */,
 				F5A171922013236400440783 /* Assets.xcassets */,
 				F5A171942013236400440783 /* LaunchScreen.storyboard */,
 				F5A171972013236400440783 /* Info.plist */,
 				F59FCE73201690D30052BA27 /* citations */,
 				F56188952013B10500F856C2 /* GoogleService-Info.plist */,
-				F56188972013B43100F856C2 /* PensieveModel.swift */,
 			);
 			path = "Pensieve AR";
+			sourceTree = "<group>";
+		};
+		F5B8A8C021165C5F00DF47D4 /* KGFloatingDrawer */ = {
+			isa = PBXGroup;
+			children = (
+				F5B8A8B721165C5900DF47D4 /* KGDrawerAnimating.swift */,
+				F5B8A8BA21165C5900DF47D4 /* KGDrawerSpringAnimator.swift */,
+				F5B8A8B821165C5900DF47D4 /* KGDrawerView.swift */,
+				F5B8A8B921165C5900DF47D4 /* KGDrawerViewController.swift */,
+				F5B8A8BB21165C5A00DF47D4 /* KGFloatingDrawer.h */,
+			);
+			path = KGFloatingDrawer;
+			sourceTree = "<group>";
+		};
+		F5B8A8C121165C7400DF47D4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F56188972013B43100F856C2 /* PensieveModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,7 +238,6 @@
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManagerSwift/IQKeyboardManagerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/KGFloatingDrawer/KGFloatingDrawer.framework",
 				"${BUILT_PRODUCTS_DIR}/Material/Material.framework",
 				"${BUILT_PRODUCTS_DIR}/Motion/Motion.framework",
 				"${BUILT_PRODUCTS_DIR}/YNSearch/YNSearch.framework",
@@ -221,7 +250,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManagerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KGFloatingDrawer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Material.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Motion.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YNSearch.framework",
@@ -261,9 +289,13 @@
 				F5A1719E2013328C00440783 /* AddMemoryViewController.swift in Sources */,
 				F56AA00C2019BAB500FE0499 /* InstagramSearchViewController.swift in Sources */,
 				F59F47BF2016AB6B004D19D3 /* MemoryGalleryViewController.swift in Sources */,
+				F5B8A8BC21165C5A00DF47D4 /* KGDrawerAnimating.swift in Sources */,
+				F5B8A8BF21165C5A00DF47D4 /* KGDrawerSpringAnimator.swift in Sources */,
+				F5B8A8BE21165C5A00DF47D4 /* KGDrawerViewController.swift in Sources */,
 				F59FCE6620168D3F0052BA27 /* LeftDrawerTableViewController.swift in Sources */,
 				F59FCE6B20168F650052BA27 /* InstagramGalleryViewController.swift in Sources */,
 				F56188982013B43100F856C2 /* PensieveModel.swift in Sources */,
+				F5B8A8BD21165C5A00DF47D4 /* KGDrawerView.swift in Sources */,
 				F59FCE6F20168F9C0052BA27 /* PersonalGalleryViewController.swift in Sources */,
 				F5A1718A2013236400440783 /* AppDelegate.swift in Sources */,
 			);
@@ -404,7 +436,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7K2FU3KV2G;
+				DEVELOPMENT_TEAM = 53XJF988U2;
 				INFOPLIST_FILE = "Pensieve AR/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.AdamsApps.Pensieve-AR";
@@ -421,7 +453,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7K2FU3KV2G;
+				DEVELOPMENT_TEAM = 53XJF988U2;
 				INFOPLIST_FILE = "Pensieve AR/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.AdamsApps.Pensieve-AR";

@@ -180,7 +180,7 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
                             let url = item["src"] as! String
                             let isVideo = item["is_video"] as! Bool
                             let caption = item["caption"] as! String
-                            print(caption)
+                            print("Caption: \(caption)")
                             if(url != nil) {
                                 if let data = try? Data(contentsOf: URL(string: url)!) {
                                     if (data != nil) {
@@ -258,6 +258,7 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
                             self.sceneView.scene.rootNode.enumerateChildNodes { (node, stop) -> Void in
                                 node.removeFromParentNode()
                             }
+                            print(json)
                             for item in json {
                                 let url = item["src"] as! String
                                 let isVideo = item["is_video"] as! Bool
@@ -271,43 +272,43 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
                                                 let image = UIImage(data: data)
                                                 self.mediaForViews.append(image)
                                             }
-//                                            let node = SCNNode()
-//                                            node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
-//                                            let targetNode = SCNNode()
-//                                            let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
-//                                            targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
-//                                            let lookat = SCNLookAtConstraint(target: targetNode)
-//                                            node.constraints = [lookat]
-//                                            if (isVideo){
-//                                                let videoURL = URL(string: url)
-//                                                let player = AVPlayer(url: videoURL!)
-//
-//                                                // To make the video loop
-//                                                player.actionAtItemEnd = .none
-//                                                NotificationCenter.default.addObserver(
-//                                                    self,
-//                                                    selector: #selector(MemoryGalleryViewController.playerItemDidReachEnd),
-//                                                    name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-//                                                    object: player.currentItem)
-//
-//                                                let videoNode = SKVideoNode(avPlayer: player)
-//                                                let size = CGSize(width: 1024, height: 512)
-//                                                videoNode.size = size
-//                                                videoNode.position = CGPoint(x: 512, y: 256)
-//                                                videoNode.yScale = -1.0
-//                                                let spriteScene = SKScene(size: size)
-//                                                videoNode.play()
-//                                                spriteScene.addChild(videoNode)
-////                                                 node.geometry?.firstMaterial?.diffuse.contents = spriteScene TODO uncomment when not circle
-//                                            } else {
-//                                                let image = UIImage(data: data)
-//                                                // node.geometry?.firstMaterial?.diffuse.contents = image TODO: uncomment for not circle view
-//                                                self.imagesForCircleView.append(image)
-//                                            }
-//                                            node.position = SCNVector3(CGFloat( 2.0 - 9.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
-//                                                                       CGFloat(y_val),
-//                                                                       CGFloat(2.0 - 9.0*(Float(arc4random()) / Float(UINT32_MAX))))
-//                                            self.sceneView.scene.rootNode.addChildNode(node)
+                                            let node = SCNNode()
+                                            node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
+                                            let targetNode = SCNNode()
+                                            let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
+                                            targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
+                                            let lookat = SCNLookAtConstraint(target: targetNode)
+                                            node.constraints = [lookat]
+                                            if (isVideo){
+                                                let videoURL = URL(string: url)
+                                                let player = AVPlayer(url: videoURL!)
+
+                                                // To make the video loop
+                                                player.actionAtItemEnd = .none
+                                                NotificationCenter.default.addObserver(
+                                                    self,
+                                                    selector: #selector(MemoryGalleryViewController.playerItemDidReachEnd),
+                                                    name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                                    object: player.currentItem)
+
+                                                let videoNode = SKVideoNode(avPlayer: player)
+                                                let size = CGSize(width: 1024, height: 512)
+                                                videoNode.size = size
+                                                videoNode.position = CGPoint(x: 512, y: 256)
+                                                videoNode.yScale = -1.0
+                                                let spriteScene = SKScene(size: size)
+                                                videoNode.play()
+                                                spriteScene.addChild(videoNode)
+//                                                 node.geometry?.firstMaterial?.diffuse.contents = spriteScene TODO uncomment when not circle
+                                            } else {
+                                                let image = UIImage(data: data)
+                                                // node.geometry?.firstMaterial?.diffuse.contents = image TODO: uncomment for not circle view
+//                                                self.imagesForCircleView.append(image) ?????????????
+                                            }
+                                            node.position = SCNVector3(CGFloat( 2.0 - 9.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                                                       CGFloat(y_val),
+                                                                       CGFloat(2.0 - 9.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                            self.sceneView.scene.rootNode.addChildNode(node)
                                         }
                                     }
                                 }
@@ -319,7 +320,9 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
                 } else if let error = error {
                     print(error.localizedDescription)
                 }
-                self.make180Gallery(radius: 5, numRows: 2, media: self.mediaForViews)
+                if !self.mediaForViews.isEmpty {
+                    self.make180Gallery(radius: 5, numRows: 2, media: self.mediaForViews)
+                }
             }
             
             task.resume()
@@ -390,6 +393,8 @@ class InstagramGalleryViewController: UIViewController, ARSKViewDelegate, CLLoca
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let username = searchBar.text
+        print("search instagram username: \(username!)")
+        self.dismissKeyboard()
         getInstagramMemoriesFromUsername(username: username!)
     }
 }

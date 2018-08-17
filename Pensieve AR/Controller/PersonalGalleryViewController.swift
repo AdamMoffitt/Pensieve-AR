@@ -84,6 +84,10 @@ class PersonalGalleryViewController: UIViewController, ARSCNViewDelegate, ARSess
         
         sceneView.session.run(configuration)
         sceneView.run()
+        
+        if PensieveModel.shared.instagramUsername == nil {
+            promptEnterUsername()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -97,6 +101,44 @@ class PersonalGalleryViewController: UIViewController, ARSCNViewDelegate, ARSess
         
         // Pause the view's session
         sceneView.session.pause()
+    }
+    
+    func promptEnterUsername() {
+        print("get username")
+        let alertController = UIAlertController(title: "What is your Instagram Username?", message: "",
+                                                preferredStyle: .alert)
+        print(1)
+        
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Instagram Username"
+            textField.textAlignment = .center
+        }
+        
+        print(2)
+        alertController.addAction(UIAlertAction(title: "Search", style: .default, handler: {
+            alert -> Void in
+            let usernameField = alertController.textFields![0] as UITextField
+            print(3)
+            if let username = usernameField.text {
+                if usernameField.text! != "" {
+                    print("lets search instagram for \(username)")
+                    PensieveModel.shared.instagramUsername = username
+                    self.getProfileImages()
+                } else {
+                    print(4)
+                    let errorAlert = UIAlertController(title: "Error", message: "Please enter a username", preferredStyle: .alert)
+                    errorAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
+                        alert -> Void in
+                        self.present(alertController, animated: true, completion: nil)
+                    }))
+                    self.present(errorAlert, animated: true, completion: nil)
+                }
+            }
+        }))
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        print(6)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - ARSessionObserver
@@ -127,7 +169,7 @@ class PersonalGalleryViewController: UIViewController, ARSCNViewDelegate, ARSess
     
     func getProfileImages() {
         print("pull profile down")
-        let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instagramProfileScraper?profile=admoffitt15&n=15")
+        let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instagramProfileScraper?profile=\(String(describing: PensieveModel.shared.instagramUsername))&n=15")
         
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             
@@ -135,12 +177,13 @@ class PersonalGalleryViewController: UIViewController, ARSCNViewDelegate, ARSess
                 do {
                     // Convert the data to JSON
                     let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]]
-                    print("json serialized: \(jsonSerialized)")
+                    print("json serialized: \(String(describing: jsonSerialized))")
                     if let json = jsonSerialized {
                         for item in json {
                             let url = item["src"] as! String
                             let isVideo = item["is_video"] as! Bool
                             let caption = item["caption"] as! String
+                            print("Caption: \(caption)")
                             if(url != nil) {
                                 if let data = try? Data(contentsOf: URL(string: url)!) {
                                     if (data != nil) {

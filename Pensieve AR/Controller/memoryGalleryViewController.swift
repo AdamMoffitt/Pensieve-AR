@@ -74,8 +74,7 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
             locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
             locationManager.distanceFilter = 15
             locationManager.startUpdatingLocation()
-            
-            
+            // pull images when location manager didChangeAuthorization returns that user allows location permissions
         }
         
         notificationCenter.delegate = self
@@ -83,10 +82,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
             if granted {
                 print("NotificationCenter Authorization Granted!")
             }
-        }
-        
-        if (CLLocationManager.locationServicesEnabled()) {
-            pullImages()
         }
         
         self.navigationController?.navigationBar.alpha = 0.5
@@ -155,7 +150,7 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
     @IBAction func refreshButtonPressed(_ sender: Any) {
         let currentLocation = locationManager.location
         let geoFire = GeoFire(firebaseRef: SharedPensieveModel!.ref!.child("memories"))
-        var circleQuery = geoFire.query(at: currentLocation!, withRadius: 0.02)
+        let circleQuery = geoFire.query(at: currentLocation!, withRadius: 0.02)
         var queryHandle = circleQuery.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
             print("Key '\(key!)' entered the search area and is at location '\(location!)'")
             
@@ -171,7 +166,7 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                         if let data = try? Data(contentsOf: URL(string: imageTempURL)!) {
                             if (data != nil) {
                                 var image = UIImage(data: data)
-                                image?.resize(toTargetSize: CGSize(width: 640, height: 640))
+                                image = image?.resize(toTargetSize: CGSize(width: 640, height: 640))
                                 //self.setImage(image: image!, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                                 image = self.orientImage(image: image!)
                                 //print("IMAGE ORIENTATION: \((image?.imageOrientation)!.rawValue)")
@@ -426,13 +421,13 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                 do {
                     // Convert the data to JSON
                     let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]]
-                    print("json serialized: \(jsonSerialized)")
+                    print("json serialized: \(String(describing: jsonSerialized))")
                     if let json = jsonSerialized {
                         for item in json {
                             let url = item["src"] as! String
                             let isVideo = item["is_video"] as! Bool
                             let caption = item["caption"] as! String
-                            print(caption)
+                            print("Caption: \(caption)")
                             if(url != nil) {
                                 if let data = try? Data(contentsOf: URL(string: url)!) {
                                     if (data != nil) {
@@ -511,12 +506,13 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                 do {
                     // Convert the data to JSON
                     let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]]
-                    print("json serialized: \(jsonSerialized)")
+                    print("json serialized: \(String(describing: jsonSerialized))")
                     if let json = jsonSerialized {
                         for item in json {
                             let url = item["src"] as! String
                             let isVideo = item["is_video"] as! Bool
                             let caption = item["caption"] as! String
+                            print("Caption: \(caption)")
                             if(url != nil) {
                                 if let data = try? Data(contentsOf: URL(string: url)!) {
                                     if (data != nil) {
@@ -570,56 +566,6 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
                         }
                     }
                 }  catch let error as NSError {
-                print(error.localizedDescription)
-                }
-            } else if let error = error {
-                print(error.localizedDescription)
-            }
-            }
-
-            task.resume()
-    }
-    
-    func pullYourCrapDown(latitude: Double, longitude: Double) {
-        print("pull christie's crap down")
-        let lat = String(latitude)
-        let long = String(longitude)
-        let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instaImages?latitude=\(lat)&longitude=\(long)")
-        print(url)
-        
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            
-            if let data = data {
-                do {
-                    // Convert the data to JSON
-                    let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [String]
-                    
-                    if let json = jsonSerialized {
-                        for imageUrl in json {
-                            print(imageUrl)
-                            if(imageUrl != nil) {
-                                if let data = try? Data(contentsOf: URL(string: imageUrl)!) {
-                                    if (data != nil) {
-                                        let image = UIImage(data: data)
-                                        image?.resize(toTargetSize: CGSize(width: 640, height: 640))
-                                        let node = SCNNode()
-                                        node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
-                                        let targetNode = SCNNode()
-                                        let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
-                                        targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
-                                        let lookat = SCNLookAtConstraint(target: targetNode)
-                                        node.constraints = [lookat]
-                                        node.geometry?.firstMaterial?.diffuse.contents = image
-                                        node.position = SCNVector3(CGFloat( 5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
-                                                                   CGFloat(y_val),
-                                                                   CGFloat(5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX))))
-                                        self.sceneView.scene.rootNode.addChildNode(node)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }  catch let error as NSError {
                     print(error.localizedDescription)
                 }
             } else if let error = error {
@@ -630,6 +576,59 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
         task.resume()
     }
     
+    func pullYourCrapDown(latitude: Double, longitude: Double) { // this is call to get instagram memories tagged near user
+        print("pull christie's crap down")
+        let lat = String(latitude)
+        let long = String(longitude)
+        if let url = URL(string: "https://us-central1-pensieve-ar.cloudfunctions.net/instaImages?latitude=\(lat)&longitude=\(long)") {
+            print(url)
+            
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                
+                if let data = data {
+                    do {
+                        // Convert the data to JSON
+                        let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [String]
+                        
+                        if let json = jsonSerialized {
+                            for imageUrl in json {
+                                print(imageUrl)
+                                if(imageUrl != nil) {
+                                    if let url = URL(string: imageUrl) {
+                                        if let data = try? Data(contentsOf: url) {
+                                            if (data != nil) {
+                                                let image = UIImage(data: data)
+                                                image?.resize(toTargetSize: CGSize(width: 640, height: 640))
+                                                let node = SCNNode()
+                                                node.geometry = SCNBox(width: 1, height: 1, length: 0.0000001, chamferRadius: 0)
+                                                let targetNode = SCNNode()
+                                                let y_val = 0.5*Float(arc4random()) / Float(UINT32_MAX)
+                                                targetNode.position = SCNVector3(CGFloat(0), CGFloat(y_val), CGFloat(0))
+                                                let lookat = SCNLookAtConstraint(target: targetNode)
+                                                node.constraints = [lookat]
+                                                node.geometry?.firstMaterial?.diffuse.contents = image
+                                                node.position = SCNVector3(CGFloat( 5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX)) ),
+                                                                           CGFloat(y_val),
+                                                                           CGFloat(5.0 - 10.0*(Float(arc4random()) / Float(UINT32_MAX))))
+                                                self.sceneView.scene.rootNode.addChildNode(node)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }  catch let error as NSError {
+                        print(error.localizedDescription)
+                    }
+                } else if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+            
+            task.resume()
+        }
+    }
+    
     func pullImages() {
         
         if CLLocationManager.locationServicesEnabled() {
@@ -637,9 +636,11 @@ class MemoryGalleryViewController: UIViewController, ARSCNViewDelegate, ARSessio
             case .notDetermined, .restricted, .denied:
                 print("No access")
             case .authorizedAlways, .authorizedWhenInUse:
-                self.pullYourCrapDown(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)
-                // getProfileImages()
-                self.getInstagramMemories(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)
+                if let latitude = self.locationManager.location?.coordinate.latitude, let longitude = self.locationManager.location?.coordinate.latitude {
+                    self.pullYourCrapDown(latitude: latitude, longitude: longitude)
+                    // getProfileImages()
+                    self.getInstagramMemories(latitude: latitude, longitude: longitude)
+                }
             }
         } else {
             print("Location services are not enabled")
