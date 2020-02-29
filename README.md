@@ -4,4 +4,6 @@ Users can upload Photo / Video Memories, tag them to locations, and other users 
 
 Using iOS ARKit, Firebase Core Location
 
+Team: Adam Moffitt, Hunter Hurja, Christie Matthews
+
 See Video Demo here: https://github.com/AdamMoffitt/Pensieve-AR/blob/master/Pensieve-AR-Demo.mp4
