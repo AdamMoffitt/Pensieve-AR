@@ -10,7 +10,7 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^3.2.2",
     "cheerio": "^1.0.0-rc.2",
     "firebase-admin": "~5.8.1",
     "firebase-functions": "^0.8.1",
